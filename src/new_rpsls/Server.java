@@ -35,28 +35,46 @@ public class Server extends Application{
     //Implement the GUI
     @Override
     public void start(Stage primaryStage) throws Exception {
+        //Create the server
+        this.server = new ServerSocket(5555);
         //Thread that listens for new server connections
+        //We need a new thread to just listen and accept clients
+        //Yes nested threads are confusing
         new Thread(()->{
             try{
-                //Create the server
-                this.server = new ServerSocket(5555);
-
-                //Sit and listen for connections
-                while(true){
+                while (true){
                     //Accept new clients
                     Socket newClient = server.accept();
 
                     //Add the new client to the list of connected clients
-                    clients.add(new ClientThread(
+                    ClientThread temp = new ClientThread(
                             newClient,
                             new BufferedReader(new InputStreamReader(newClient.getInputStream())),
                             new PrintWriter(newClient.getOutputStream())
-                    ));
+                    );
 
-                    //DEBUG
-                    System.out.println("A new client connected");
-                    sendToAll("A new client has connected!");
+                    clients.add(temp);
+                    new Thread(temp).start();
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }).start();
 
+        //Thread that handles messages recieved
+        new Thread(()->{
+            try{
+                //Sit and listen for connections
+                while(true){
+                    //Look through all the clients to see if they have a queued message
+                    for(int i = 0; i < clients.size(); i++){
+                        //If we have a queued message, send it and nullify it
+                        if(clients.get(i).queuedMessage != ""){
+                            System.out.println("Sending message");
+                            sendToAll(clients.get(i).queuedMessage);
+                        }
+                        clients.get(i).queuedMessage = "";
+                    }
                 }
             }catch(Exception e){
                 e.printStackTrace();
@@ -70,6 +88,10 @@ public class Server extends Application{
         private Socket socket;
         private BufferedReader in;
         private PrintWriter out;
+        private String userName = "UNSET";
+        //Each client has a queued message that we iterate through in the server thread
+        //If the message isn't empty, we'll send it
+        private String queuedMessage = "";
 
         public Socket getSocket() {
             return socket;
@@ -107,6 +129,24 @@ public class Server extends Application{
             //For each client thread execute this loop
             while(true){
                 //Listen for input data
+                try{
+                    String data = in.readLine();
+                    System.out.println("Got data from a client: " + data);
+                    //Handle case for if we've recieved a !USER command
+                    if(data.substring(0,6).equals("!USER ")){
+                        System.out.println("Client has asked to change name");
+                        //If we don't have a username, set it and notify the server
+                        if(this.userName == "UNSET"){
+                            queuedMessage = data.substring(6) + " has connected!";
+                        }else{
+                            System.out.println("Notifying other users the client has changed their name");
+                            queuedMessage = userName + " has changed their name to " + data.substring(6);
+                        }
+                        this.userName = data.substring(6);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
     }
