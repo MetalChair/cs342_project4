@@ -43,7 +43,6 @@ public class Client extends Application {
             listener.getOut().println("!USER " + userName);
             listener.getOut().flush();
 
-            log.appendText("You connected! \n");
 
         }catch(Exception e){
             e.printStackTrace();

@@ -37,25 +37,16 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/new_rpsls/Server.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="652">
-                  <caret line="75" selection-start-line="75" selection-end-line="75" />
+                <state relative-caret-position="493">
+                  <caret line="49" column="28" selection-start-line="49" selection-start-column="28" selection-end-line="58" selection-end-column="63" />
                   <folding>
-                    <element signature="e#3236#3237#0" expanded="true" />
-                    <element signature="e#3328#3329#0" expanded="true" />
-                    <element signature="e#3402#3403#0" expanded="true" />
-                    <element signature="e#3486#3487#0" expanded="true" />
-                    <element signature="e#3559#3560#0" expanded="true" />
-                    <element signature="e#3644#3645#0" expanded="true" />
+                    <element signature="e#3540#3541#0" expanded="true" />
+                    <element signature="e#3632#3633#0" expanded="true" />
+                    <element signature="e#3706#3707#0" expanded="true" />
+                    <element signature="e#3790#3791#0" expanded="true" />
+                    <element signature="e#3863#3864#0" expanded="true" />
+                    <element signature="e#3948#3949#0" expanded="true" />
                   </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/DEPRECATED/Server.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-3553">
-                  <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
                 </state>
               </provider>
             </entry>
@@ -67,8 +58,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/new_rpsls/Client.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="612">
-                  <caret line="45" column="45" selection-start-line="45" selection-start-column="45" selection-end-line="45" selection-end-column="45" />
+                <state relative-caret-position="306">
+                  <caret line="45" lean-forward="true" selection-start-line="45" selection-end-line="45" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="e#2900#2901#0" expanded="true" />
@@ -192,7 +183,7 @@
     <property name="Repository.Attach.Sources" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554408598485" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554413206996" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.Arquillian JUnit4" value="" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
@@ -263,7 +254,7 @@
       <workItem from="1553739276867" duration="4824000" />
       <workItem from="1553782662105" duration="27107000" />
       <workItem from="1554237036949" duration="1921000" />
-      <workItem from="1554400787558" duration="7545000" />
+      <workItem from="1554400787558" duration="10803000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1553807731536</created>
@@ -281,10 +272,11 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="41759000" />
+    <option name="totallyTimeSpent" value="45017000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49899396" visible="true" weight="0.25476947" />
       <window_info id="Structure" order="1" sideWeight="0.501006" side_tool="true" weight="0.25302014" />
@@ -295,8 +287,8 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3286119" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.2954014" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.3990647" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" side_tool="true" visible="true" weight="0.28838658" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3990647" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -378,12 +370,6 @@
           <properties />
           <option name="timeStamp" value="15" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/new_rpsls/Server.java</url>
-          <line>69</line>
-          <properties />
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/new_rpsls/Client.java</url>
           <line>25</line>
@@ -421,16 +407,6 @@
     <entry file="file://$PROJECT_DIR$/src/rps/ClientTest.java" />
     <entry file="file://$PROJECT_DIR$/src/rps/Server.java" />
     <entry file="file://$PROJECT_DIR$/src/rps/Client.java" />
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="FIRST">
-          <first_editor relative-caret-position="85">
-            <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/DEPRECATED/Client.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="846">
@@ -443,8 +419,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/new_rpsls/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="45" column="45" selection-start-line="45" selection-start-column="45" selection-end-line="45" selection-end-column="45" />
+        <state relative-caret-position="306">
+          <caret line="45" lean-forward="true" selection-start-line="45" selection-end-line="45" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#2900#2901#0" expanded="true" />
@@ -463,24 +439,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="85">
+            <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/DEPRECATED/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3553">
+        <state relative-caret-position="-5236">
           <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/Programs/Java/src.zip!/java/lang/Throwable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="755">
+          <caret line="632" column="16" selection-start-line="632" selection-start-column="16" selection-end-line="632" selection-end-column="16" />
+          <folding>
+            <element signature="e#26222#26223#0" expanded="true" />
+            <element signature="e#26265#26266#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/new_rpsls/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="652">
-          <caret line="75" selection-start-line="75" selection-end-line="75" />
+        <state relative-caret-position="493">
+          <caret line="49" column="28" selection-start-line="49" selection-start-column="28" selection-end-line="58" selection-end-column="63" />
           <folding>
-            <element signature="e#3236#3237#0" expanded="true" />
-            <element signature="e#3328#3329#0" expanded="true" />
-            <element signature="e#3402#3403#0" expanded="true" />
-            <element signature="e#3486#3487#0" expanded="true" />
-            <element signature="e#3559#3560#0" expanded="true" />
-            <element signature="e#3644#3645#0" expanded="true" />
+            <element signature="e#3540#3541#0" expanded="true" />
+            <element signature="e#3632#3633#0" expanded="true" />
+            <element signature="e#3706#3707#0" expanded="true" />
+            <element signature="e#3790#3791#0" expanded="true" />
+            <element signature="e#3863#3864#0" expanded="true" />
+            <element signature="e#3948#3949#0" expanded="true" />
           </folding>
         </state>
       </provider>

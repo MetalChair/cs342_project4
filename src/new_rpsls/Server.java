@@ -16,10 +16,10 @@ public class Server extends Application{
     private int port;
 
     //Hold the server socket
-    private ServerSocket server;
+    volatile private ServerSocket server;
 
     //Hold all connected clients
-    private ArrayList<ClientThread> clients = new ArrayList<>();
+    volatile private ArrayList<ClientThread> clients = new ArrayList<>();
 
     public static void main(String[] args){
         launch(args);
@@ -37,24 +37,27 @@ public class Server extends Application{
     public void start(Stage primaryStage) throws Exception {
         //Create the server
         this.server = new ServerSocket(5555);
+
         //Thread that listens for new server connections
         //We need a new thread to just listen and accept clients
         //Yes nested threads are confusing
         new Thread(()->{
             try{
                 while (true){
-                    //Accept new clients
-                    Socket newClient = server.accept();
+                        //Accept new clients
+                        Socket newClient = server.accept();
+                        synchronized (clients){
+                            //Add the new client to the list of connected clients
+                            ClientThread temp = new ClientThread(
+                                    newClient,
+                                    new BufferedReader(new InputStreamReader(newClient.getInputStream())),
+                                    new PrintWriter(newClient.getOutputStream())
+                            );
 
-                    //Add the new client to the list of connected clients
-                    ClientThread temp = new ClientThread(
-                            newClient,
-                            new BufferedReader(new InputStreamReader(newClient.getInputStream())),
-                            new PrintWriter(newClient.getOutputStream())
-                    );
-
-                    clients.add(temp);
-                    new Thread(temp).start();
+                            clients.add(temp);
+                            new Thread(temp).start();
+                            System.out.println(clients.size());
+                    }
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -66,14 +69,15 @@ public class Server extends Application{
             try{
                 //Sit and listen for connections
                 while(true){
-                    //Look through all the clients to see if they have a queued message
-                    for(int i = 0; i < clients.size(); i++){
-                        //If we have a queued message, send it and nullify it
-                        if(clients.get(i).queuedMessage != ""){
-                            System.out.println("Sending message");
-                            sendToAll(clients.get(i).queuedMessage);
+                    synchronized (clients){
+                        //Look through all the clients to see if they have a queued message
+                        for(int i = 0; i < clients.size(); i++){
+                            //If we have a queued message, send it and nullify it
+                            if(clients.get(i).queuedMessage != ""){
+                                sendToAll(clients.get(i).queuedMessage);
+                            }
+                            clients.get(i).queuedMessage = "";
                         }
-                        clients.get(i).queuedMessage = "";
                     }
                 }
             }catch(Exception e){
@@ -85,13 +89,13 @@ public class Server extends Application{
     //Nested class holding client thread
     class ClientThread implements Runnable{
 
-        private Socket socket;
-        private BufferedReader in;
-        private PrintWriter out;
-        private String userName = "UNSET";
+        volatile private Socket socket;
+        volatile private BufferedReader in;
+        volatile private PrintWriter out;
+        volatile private String userName = "UNSET";
         //Each client has a queued message that we iterate through in the server thread
         //If the message isn't empty, we'll send it
-        private String queuedMessage = "";
+        volatile private String queuedMessage = "";
 
         public Socket getSocket() {
             return socket;
@@ -132,17 +136,19 @@ public class Server extends Application{
                 try{
                     String data = in.readLine();
                     System.out.println("Got data from a client: " + data);
+                    System.out.println(queuedMessage);
                     //Handle case for if we've recieved a !USER command
-                    if(data.substring(0,6).equals("!USER ")){
-                        System.out.println("Client has asked to change name");
-                        //If we don't have a username, set it and notify the server
-                        if(this.userName == "UNSET"){
-                            queuedMessage = data.substring(6) + " has connected!";
-                        }else{
-                            System.out.println("Notifying other users the client has changed their name");
-                            queuedMessage = userName + " has changed their name to " + data.substring(6);
-                        }
-                        this.userName = data.substring(6);
+                    if(data.contains("!USER ") && data.substring(0,6).equals("!USER ")) {
+                            System.out.println("Client has asked to change name");
+                            //If we don't have a username, set it and notify the server
+                            if (this.userName == "UNSET") {
+                                queuedMessage = data.substring(6) + " has connected!";
+                            } else {
+                                queuedMessage = userName + " has changed their name to " + data.substring(6);
+                            }
+                            this.userName = data.substring(6);
+                    }else{
+                        queuedMessage = userName + ": " + data;
                     }
                 }catch (Exception e){
                     e.printStackTrace();
