@@ -1,4 +1,4 @@
-package rps;
+package DEPRECATED;
 
 import javafx.application.Application;
 import javafx.application.Platform;

@@ -1,4 +1,4 @@
-package rps;
+package DEPRECATED;
 
 
 import java.io.*;
