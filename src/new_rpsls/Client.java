@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -16,12 +17,17 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Client extends Application {
     Listener listener;
     TextArea log;
     Stage stage;
+    TextArea connectedPlayers;
 
     private void connectToServer(String ip, String port, String userName){
         System.out.println("Ready to connect with this information");
@@ -29,6 +35,7 @@ public class Client extends Application {
         try{
             Socket socket = new Socket("localhost",Integer.parseInt(port));
             Listener temp = new Listener(
+                    socket,
                     new BufferedReader(new InputStreamReader(socket.getInputStream())),
                     new PrintWriter(socket.getOutputStream()),
                     userName
@@ -54,11 +61,32 @@ public class Client extends Application {
         BorderPane chatPane = new BorderPane();
         chatPane.setPadding(new Insets(5,5,5,5));
 
+        /*
+        layout:
+                        fullContainer
+        Container                   Player List
+        --------------------------  Connected Players
+        | GameLog                |
+        |                        |
+        |                        |
+        |                        |
+        |                        |
+        |                        |
+        |                        |
+        --------------------------
+        --------------------------
+        |Input                   |
+        --------------------------
+         */
         VBox container = new VBox();
+        VBox playerList = new VBox();
+        HBox fullContainer = new HBox();
 
         //Create the box where we will log data from server
+        Label serverLabel = new Label("Server Log:");
         TextArea log = new TextArea();
         log.setMinHeight(400);
+        log.setEditable(false);
         this.log = log;
 
         //Create the box where we can enter data
@@ -70,10 +98,19 @@ public class Client extends Application {
             input.clear();
         });
 
-        container.getChildren().addAll(log,input);
-        chatPane.setCenter(container);
+        //Create the bcx for showing all currently connected players
+        Label connected = new Label("Players Online:");
+        connectedPlayers = new TextArea();
+        connectedPlayers.setEditable(false);
+        playerList.getChildren().addAll(connected,connectedPlayers);
 
-        return new Scene(chatPane,700,500);
+        fullContainer.getChildren().addAll(container,playerList);
+        container.getChildren().addAll(serverLabel,log,input);
+
+        //Set the secene
+        chatPane.setCenter(fullContainer);
+
+        return new Scene(chatPane,1000,500);
     }
 
     //Setup the gui for our first UI where we ask for a port, IP, and username
@@ -113,6 +150,24 @@ public class Client extends Application {
         launch(args);
     }
 
+    //Override the stop command so we can kill our connection
+    @Override
+    public void stop(){
+        //Notify our server that we're dying
+        listener.getOut().println("!QUIT");
+        listener.getOut().flush();
+        listener.terminate();
+
+        //Close our connection
+        try{
+            listener.socket.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        //Kill the window
+        System.out.println("Quitting");
+    }
+
     //Implement the GUI
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -123,9 +178,15 @@ public class Client extends Application {
 
     class Listener implements Runnable{
 
+        //Are we running?
+        private boolean running = true;
+
         //Hold data allowing us to read and write from server
         BufferedReader in;
         PrintWriter out;
+
+        //Hold socket of listener
+        Socket socket;
 
         //Holds the username of the client
         String username;
@@ -154,21 +215,45 @@ public class Client extends Application {
             this.username = username;
         }
 
-        public Listener(BufferedReader in, PrintWriter out, String username) {
+        public Listener(Socket socket, BufferedReader in, PrintWriter out, String username) {
             this.in = in;
             this.out = out;
+            this.socket = socket;
+            this.username = username;
+        }
+
+        public void terminate(){
+            running = false;
         }
 
         //Create a thread to sit on the server and listen to it
         @Override
         public void run() {
-            while(true){
+            while(running){
                 try{
                     String dataFromServer = in.readLine();
                     System.out.println(dataFromServer);
-                    if(log != null)
-                        log.appendText(dataFromServer + "\n");
+                    //If we have a log
+                    if(log != null){
+                        //We need to handle special cases IE, Getting a new client list
+                        //Or getting a challenge
 
+                        //If we got a new client list
+                        if(dataFromServer.contains("!CLIENTS ") && dataFromServer.substring(0,9).equals("!CLIENTS ")){
+                            //Split it into a list
+                            dataFromServer = dataFromServer.substring(9);
+                            List<String> nameList = Arrays.asList(dataFromServer.split(","));
+                            //Clear our box and add all the names
+                            connectedPlayers.clear();
+                            for(int i = 0; i < nameList.size(); i++){
+                                connectedPlayers.appendText(nameList.get(i) + "\n");
+                            }
+                        }else{
+                            //If we have a basic message, just throw it into the log
+                            log.appendText(dataFromServer + "\n");
+
+                        }
+                    }
                 }catch(Exception e){
                     e.printStackTrace();
                 }
