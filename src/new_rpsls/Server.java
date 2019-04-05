@@ -26,6 +26,8 @@ public class Server extends Application{
     }
 
     private void cullDeadConnection(ClientThread client){
+        client.queuedMessage = "";
+        client.terminate();
         //Kill all our resources
         try{
             client.in.close();
@@ -115,7 +117,6 @@ public class Server extends Application{
                             //If we lost a connection, cull the population
                             else if(clients.get(i).isKill){
                                 cullDeadConnection(clients.get(i));
-                                clients.get(i).terminate();
                                 clients.remove(i);
                                 sendConnectedPlayersList(getConnectedPlayersList());
                             }
@@ -186,7 +187,7 @@ public class Server extends Application{
         @Override
         public void run() {
             //For each client thread execute this loop
-            while(running){
+            while(running && !isKill){
                 //Listen for input data
                 try{
                     String data = in.readLine();
