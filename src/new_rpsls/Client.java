@@ -1,5 +1,7 @@
 package new_rpsls;
 
+import javafx.application.Platform;
+import javafx.scene.paint.Color;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -8,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -24,11 +27,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.sun.prism.paint.Color.RED;
+
 public class Client extends Application {
     Listener listener;
     TextArea log;
     Stage stage;
     TextArea connectedPlayers;
+    Label challengeField;
 
     private void connectToServer(String ip, String port, String userName){
         System.out.println("Ready to connect with this information");
@@ -105,8 +111,11 @@ public class Client extends Application {
         connectedPlayers.setEditable(false);
         playerList.getChildren().addAll(connected,connectedPlayers);
 
+        //Challenge text
+        challengeField = new Label("");
+        challengeField.setTextFill(Color.rgb(255,0,0));
         fullContainer.getChildren().addAll(container,playerList);
-        container.getChildren().addAll(serverLabel,log,input);
+        container.getChildren().addAll(serverLabel,log,input,challengeField);
 
         //Set the secene
         chatPane.setCenter(fullContainer);
@@ -240,16 +249,28 @@ public class Client extends Application {
                         //Or getting a challenge
 
                         //If we got a new client list
-                        if(dataFromServer.contains("!CLIENTS ") && dataFromServer.substring(0,9).equals("!CLIENTS ")){
+                        if(dataFromServer.contains("!CLIENTS ") && dataFromServer.substring(0,9).equals("!CLIENTS ")) {
                             //Split it into a list
                             dataFromServer = dataFromServer.substring(9);
                             List<String> nameList = Arrays.asList(dataFromServer.split(","));
                             //Clear our box and add all the names
                             connectedPlayers.clear();
-                            for(int i = 0; i < nameList.size(); i++){
+                            for (int i = 0; i < nameList.size(); i++) {
                                 connectedPlayers.appendText(nameList.get(i) + "\n");
                             }
+                        }
+                        else if(dataFromServer.contains("!CHALLENGE ")){
+                            //Create string so we can set it in a Runnable
+                            final String data = dataFromServer.substring(11);
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    challengeField.setText(data);
+                                }
+                            });
+
                         }else{
+                            log.setStyle("");
                             //If we have a basic message, just throw it into the log
                             log.appendText(dataFromServer + "\n");
 
