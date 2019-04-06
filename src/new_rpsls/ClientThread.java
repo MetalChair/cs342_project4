@@ -6,6 +6,15 @@ import java.net.Socket;
 
 public class ClientThread implements Runnable{
 
+    //Stores the lobby the user is currently in
+    volatile private Lobby currentLobby = null;
+
+    //We use this to see if the user is currently in a game lobby
+    volatile private boolean isInLobby = false;
+
+    //Use this to reference the person who challenged this user to a game
+    volatile private ClientThread challenger = null;
+
     //Are we still running
     private boolean running = true;
 
@@ -22,6 +31,22 @@ public class ClientThread implements Runnable{
 
     //Our clients notify us when they die using this boolean
     volatile boolean isKill = false;
+
+    public boolean isInLobby() {
+        return isInLobby;
+    }
+
+    public void setInLobby(boolean inLobby) {
+        isInLobby = inLobby;
+    }
+
+    public ClientThread getChallenger() {
+        return challenger;
+    }
+
+    public void setChallenger(ClientThread challenger) {
+        this.challenger = challenger;
+    }
 
     public Socket getSocket() {
         return socket;
@@ -63,6 +88,14 @@ public class ClientThread implements Runnable{
         this.userName = userName;
     }
 
+    public Lobby getCurrentLobby() {
+        return currentLobby;
+    }
+
+    public void setCurrentLobby(Lobby currentLobby) {
+        this.currentLobby = currentLobby;
+    }
+
     public void setQueuedMessage(String queuedMessage) {
         this.queuedMessage = queuedMessage;
     }
@@ -71,6 +104,12 @@ public class ClientThread implements Runnable{
         this.socket = socket;
         this.in = in;
         this.out = out;
+    }
+
+    public void resetLobbyStatus(){
+        challenger = null;
+        isInLobby = false;
+        currentLobby = null;
     }
 
     //Override the run method

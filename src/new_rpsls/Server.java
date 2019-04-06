@@ -36,6 +36,8 @@ public class Server extends Application{
         }catch (Exception e){
             e.printStackTrace();
         }
+        //Update all the other player's lists of currently connected users
+        sendConnectedPlayersList(getConnectedPlayersList());
     }
 
     private void sendToAll(String message){
@@ -95,7 +97,7 @@ public class Server extends Application{
                             ClientThread temp = new ClientThread(
                                     newClient,
                                     new BufferedReader(new InputStreamReader(newClient.getInputStream())),
-                                    new PrintWriter(newClient.getOutputStream())
+                                    new PrintWriter(newClient.getOutputStream(),true)
                             );
 
                             clients.add(temp);
@@ -119,6 +121,24 @@ public class Server extends Application{
                         //Look through all the clients to see if they have a queued message
                         //Or if we need to rebuild the connected players list
                         for(int i = 0; i < clients.size(); i++){
+                            //If our client has been challenged or is in a lobby
+                            //We want to first ensure they are not sending a message
+                            //That is meant only for that game lobby
+                            if(clients.get(i).isInLobby() || clients.get(i).getChallenger() != null){
+                                //Figure out if the current player is in the lobby or if the challenger is
+                                Lobby lobby =
+                                (clients.get(i).isInLobby()) ?
+                                clients.get(i).getCurrentLobby() :
+                                clients.get(i).getChallenger().getCurrentLobby();
+
+                                Lobby.playerCommand command = lobby.proccessInput(clients.get(i).getQueuedMessage(),clients.get(i));
+
+                                if(command != Lobby.playerCommand.NONE){
+                                    //This loop only cares if we have a command that should be handled by the lobby
+                                    //all other player commands will be handled in the lobby class
+                                    break;
+                                }
+                            }
                             //If we have a queued message, send it and nullify it
                             if(clients.get(i).getQueuedMessage() != ""){
                                 //Handle if we got a challenge command
@@ -129,18 +149,33 @@ public class Server extends Application{
                                     if(challenge != null){
                                         //Check we're not trying to challenge ourself
                                         if(challenge == clients.get(i)){
-                                            sendToUser(challenge, "!CHALLENGE You can't challenge yourself. Idiot.");
+                                            //Notify ourselves if we do
+                                            sendToUser(clients.get(i), "!CHALLENGE You can't challenge yourself. Idiot.");
+                                        }else if(challenge.getChallenger() != null || challenge.getCurrentLobby() != null){
+                                            //If the user has already been challenged, tell our client
+                                            sendToUser(clients.get(i), "!CHALLENGE This user has a pending challenge already! Wait for a minute");
                                         }else{
+                                            //Else, setup the challenge
                                             sendToUser(challenge,"!CHALLENGE " + clients.get(i).getUserName() + " has challenged you to a game!");
                                             //We now put the user into a new lobby
+                                            new Lobby(clients.get(i),challenge);
+
+                                            //Notify the challenger that we have recieved their request
+                                            clients.get(i).getOut().println("!CHALLENGE Awaiting response from " + challengedUser);
+                                            clients.get(i).getOut().flush();
+
+                                            challenge.setChallenger(clients.get(i));
                                             //TODO:this bit
                                         }
                                     }
-
                                 }else{
+                                    //If the client message isn't a challenge, just send it to everyone
+                                    //This is essentially IRC function
                                     sendToAll(clients.get(i).getQueuedMessage());
                                 }
+                                //Nullify any queued messages
                                 clients.get(i).setQueuedMessage("");
+
                             //If we changed a name, rebuild our list and notify everyone
                             }else if(clients.get(i).hasChangedName){
                                 System.out.println("A client has changed names, we need to reflect this");

@@ -30,11 +30,11 @@ import java.util.List;
 import static com.sun.prism.paint.Color.RED;
 
 public class Client extends Application {
-    Listener listener;
-    TextArea log;
-    Stage stage;
-    TextArea connectedPlayers;
-    Label challengeField;
+    private Listener listener;
+    private TextArea log;
+    private Stage stage;
+    private TextArea connectedPlayers;
+    private Label challengeField;
 
     private void connectToServer(String ip, String port, String userName){
         System.out.println("Ready to connect with this information");
