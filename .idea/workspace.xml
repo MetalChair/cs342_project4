@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b1eced06-56cc-4966-8b7e-5b5408f6f15f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/new_rpsls/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/new_rpsls/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/new_rpsls/ClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/new_rpsls/ClientThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/new_rpsls/Lobby.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/new_rpsls/Lobby.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/new_rpsls/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/new_rpsls/Server.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -109,8 +105,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/new_rpsls/Server.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="169">
-                  <caret line="130" column="66" lean-forward="true" selection-start-line="130" selection-start-column="66" selection-end-line="130" selection-end-column="66" />
+                <state relative-caret-position="204">
+                  <caret line="136" column="71" selection-start-line="136" selection-start-column="71" selection-end-line="136" selection-end-column="71" />
                 </state>
               </provider>
             </entry>
@@ -141,12 +137,14 @@
       <find>lizard</find>
       <find>has chal</find>
       <find>has challe</find>
+      <find>clients.get(i).getQueuedMessage()</find>
     </findStrings>
     <replaceStrings>
       <replace>paper</replace>
       <replace>scissors</replace>
       <replace>lizard</replace>
       <replace>spock</replace>
+      <replace>currMessage</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -312,7 +310,7 @@
       <workItem from="1553782662105" duration="27107000" />
       <workItem from="1554237036949" duration="1921000" />
       <workItem from="1554400787558" duration="10803000" />
-      <workItem from="1554574951823" duration="2947000" />
+      <workItem from="1554574951823" duration="5536000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1553807731536</created>
@@ -330,7 +328,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="50847000" />
+    <option name="totallyTimeSpent" value="53436000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
@@ -556,8 +554,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/new_rpsls/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="130" column="66" lean-forward="true" selection-start-line="130" selection-start-column="66" selection-end-line="130" selection-end-column="66" />
+        <state relative-caret-position="204">
+          <caret line="136" column="71" selection-start-line="136" selection-start-column="71" selection-end-line="136" selection-end-column="71" />
         </state>
       </provider>
     </entry>

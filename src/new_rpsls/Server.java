@@ -121,6 +121,7 @@ public class Server extends Application{
                         //Look through all the clients to see if they have a queued message
                         //Or if we need to rebuild the connected players list
                         for(int i = 0; i < clients.size(); i++){
+                            String currMessage = clients.get(i).getQueuedMessage();
                             //If our client has been challenged or is in a lobby
                             //We want to first ensure they are not sending a message
                             //That is meant only for that game lobby
@@ -131,7 +132,7 @@ public class Server extends Application{
                                 clients.get(i).getCurrentLobby() :
                                 clients.get(i).getChallenger().getCurrentLobby();
 
-                                Lobby.playerCommand command = lobby.proccessInput(clients.get(i).getQueuedMessage(),clients.get(i));
+                                Lobby.playerCommand command = lobby.proccessInput(currMessage,clients.get(i));
 
                                 if(command != Lobby.playerCommand.NONE){
                                     //This loop only cares if we have a command that should be handled by the lobby
@@ -140,11 +141,11 @@ public class Server extends Application{
                                 }
                             }
                             //If we have a queued message, send it and nullify it
-                            if(clients.get(i).getQueuedMessage() != ""){
+                            if(currMessage != ""){
                                 //Handle if we got a challenge command
-                                if(clients.get(i).getQueuedMessage().contains("!CHALLENGE")){
+                                if(currMessage.contains("!CHALLENGE")){
                                     //Splice to get the username
-                                    String challengedUser = clients.get(i).getQueuedMessage().substring(11);
+                                    String challengedUser = currMessage.substring(11);
                                     ClientThread challenge = findByUsername(challengedUser);
                                     if(challenge != null){
                                         //Check we're not trying to challenge ourself
@@ -171,7 +172,7 @@ public class Server extends Application{
                                 }else{
                                     //If the client message isn't a challenge, just send it to everyone
                                     //This is essentially IRC function
-                                    sendToAll(clients.get(i).getQueuedMessage());
+                                    sendToAll(currMessage);
                                 }
                                 //Nullify any queued messages
                                 clients.get(i).setQueuedMessage("");
