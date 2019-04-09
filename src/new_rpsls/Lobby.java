@@ -3,12 +3,18 @@ package new_rpsls;
 public class Lobby {
     //Holds potential states we can get from input
     public enum playerCommand{
-        CANCEL,ACCEPT,NONE;
+        CANCEL,ACCEPT,NONE,MOVE;
     }
 
     //Hold the two clients participating in the lobby
     ClientThread client1;
     ClientThread client2;
+
+    //Holds the moves for the clients
+    int client1Move = 0;
+    int client2Move = 0;
+
+    //Hold moves for users
 
     //Hold a client we are potentially waiting on
     ClientThread waitingClient;
@@ -39,8 +45,142 @@ public class Lobby {
             destroyLobbyBeforeAcceptance();
             //clear the queued messages of the sender
             sender.setQueuedMessage("");
+        }else if(input.contains("!ACCEPT")){
+            //Handle accepting the lobby request
+            //Player 1 should already be in the lobby
+            //So we only worry about player 2
+            if(sender == waitingClient){
+                System.out.println("Client has accepted the challenge");
+                command = playerCommand.ACCEPT;
+                sender.setCurrentLobby(this);
+                sender.setInLobby(true);
+                client1.getOut().println("!CHALLENGE " + sender.getUserName() + " has accepted your challenge");
+                client1.getOut().flush();
+                this.client2 = sender;
+                //nullfiy the accepter's message
+                client2.setQueuedMessage("");
+                //We should start our game here
+                startGame();
+            }
+        }else if(input.contains("!MOVE")){
+            //Determine who sent it, set their moves
+            if(sender == client1){
+                client1Move = Integer.parseInt(input.replaceAll("[\\D]", ""));
+            }else if(sender == client2){
+                client2Move = Integer.parseInt(input.replaceAll("[\\D]", ""));
+            }
+            command = playerCommand.MOVE;
+
+            if(client1Move != 0 && client2Move != 0){
+                //If we have both inputs, determine a winner
+                determineWinnerAndAddScore();
+            }
+            sender.setQueuedMessage("");
         }
         return command;
+    }
+
+    //Determine the winner of the game
+    private void determineWinnerAndAddScore() {
+        //The games moves are as follows
+        /*
+            1: rock
+            2: scissors
+            3. paper
+            4. lizard
+            5. spock
+         */
+        ClientThread loser = null;
+        ClientThread winner = null;
+        //Handle rock > scissors
+        //handle scissors > paper
+        //Handle paper > rock
+        //handle scissors > lizard
+        //handle lizard > spock
+        //handle spock > scissors
+        //handle paper > spock
+        //handle spock > rock
+        //handle rock > lizard
+        //handle lizard > paper
+        if (client1Move == 1 && client2Move == 2) {
+            winner = client1;
+            loser = client2;
+        } else if (client2Move == 1 && client1Move == 2) {
+            winner = client2;
+            loser = client1;
+        } else if (client1Move == 2 && client2Move == 3) {
+            winner = client1;
+            loser = client2;
+        } else if (client2Move == 2 && client1Move == 3) {
+            winner = client2;
+            loser = client1;
+        } else if (client1Move == 3 && client2Move == 1) {
+            winner = client1;
+            loser = client2;
+        } else if (client2Move == 3 && client1Move == 1) {
+            winner = client2;
+            loser = client1;
+        } else if (client1Move == 2 && client2Move == 4) {
+            winner = client1;
+            loser = client2;
+        } else if (client2Move == 2 && client1Move == 4) {
+            winner = client2;
+            loser = client1;
+        } else if (client1Move == 4 && client2Move == 5) {
+            winner = client1;
+            loser = client2;
+        } else if (client2Move == 4 && client1Move == 5) {
+            winner = client2;
+            loser = client1;
+        } else if (client1Move == 5 && client2Move == 2) {
+            winner = client1;
+            loser = client2;
+        } else if (client2Move == 5 && client1Move == 2) {
+            winner = client2;
+            loser = client1;
+        } else if (client1Move == 3 && client2Move == 5) {
+            winner = client1;
+            loser = client2;
+        } else if (client2Move == 3 && client1Move == 5) {
+            winner = client2;
+            loser = client1;
+        } else if (client1Move == 5 && client2Move == 1) {
+            winner = client1;
+            loser = client2;
+        } else if (client2Move == 5 && client1Move == 1) {
+            winner = client2;
+            loser = client1;
+        } else if (client1Move == 1 && client2Move == 4) {
+            winner = client1;
+            loser = client2;
+        } else if (client2Move == 1 && client1Move == 4) {
+            winner = client2;
+            loser = client1;
+        } else if (client1Move == 4 && client2Move == 3) {
+            winner = client1;
+            loser = client2;
+        } else if (client2Move == 4 && client1Move == 3) {
+            winner = client2;
+            loser = client1;
+        }else{
+            client1.getOut().println("!GAMELOG " + client1Move + " " + client2Move + " 2");
+            client2.getOut().println("!GAMELOG " + client2Move + " " + client1Move + " 2");
+        }
+
+        //Send a string that will create a new element for the gamelog in each client
+        if(client1 == winner){
+            client1.getOut().println("!GAMELOG " + client1Move + " " + client2Move + " 1");
+            client2.getOut().println("!GAMELOG " + client2Move + " " + client1Move + " 0");
+        }else if(client2 == winner){
+            client2.getOut().println("!GAMELOG " + client2Move + " " + client1Move + " 1");
+            client1.getOut().println("!GAMELOG " + client1Move + " " + client2Move + " 0");
+        }
+
+
+        client1Move = 0;
+        client2Move = 0;
+
+
     }
 
     //Destroys the lobby when one player has challenged another
@@ -55,5 +195,13 @@ public class Lobby {
 
         waitingClient.getOut().println("!CHALLENGE " + client1.getUserName() + " has cancelled their challenge against you!");
         waitingClient.getOut().flush();
+    }
+    void startGame(){
+        client1.getOut().println("!STARTGAME");
+        client1.getOut().flush();
+
+        client2.getOut().println("!STARTGAME");
+        client2.getOut().flush();
+
     }
 }

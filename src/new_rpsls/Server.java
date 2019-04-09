@@ -172,7 +172,13 @@ public class Server extends Application{
                                 }else{
                                     //If the client message isn't a challenge, just send it to everyone
                                     //This is essentially IRC function
-                                    sendToAll(currMessage);
+                                    //We add a check to ensure users can't start the game client
+                                    if(!currMessage.contains("!STARTGAME") && !currMessage.contains("!GAMELOG")){
+                                        sendToAll(currMessage);
+                                    }else{
+                                        clients.get(i).getOut().println("Server: You can't use that command!");
+                                        clients.get(i).getOut().flush();
+                                    }
                                 }
                                 //Nullify any queued messages
                                 clients.get(i).setQueuedMessage("");

@@ -1,6 +1,8 @@
 package new_rpsls;
 
 import javafx.application.Platform;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -35,6 +37,9 @@ public class Client extends Application {
     private Stage stage;
     private TextArea connectedPlayers;
     private Label challengeField;
+    private HBox fullContainer;
+    public VBox gameLog;
+    public VBox gameTextLog;
 
     private void connectToServer(String ip, String port, String userName){
         System.out.println("Ready to connect with this information");
@@ -63,6 +68,136 @@ public class Client extends Application {
         }
     }
 
+    public HBox setupGameButtons(){
+        //Setup buttons in hbox
+        //rock
+        Image rockImg = new Image(getClass().getResourceAsStream("./Resources/rock.png"));
+        Button rockBtn = new Button();
+        rockBtn.setMaxHeight(75);
+        rockBtn.setMaxWidth(75);
+        ImageView rockBG = new ImageView(rockImg);
+        rockBG.setFitHeight(75);
+        rockBG.setFitWidth(75);
+        rockBtn.setGraphic(rockBG);
+
+        //paper
+        Image paperImg = new Image(getClass().getResourceAsStream("./Resources/paper.png"));
+        Button paperBtn = new Button();
+        paperBtn.setMaxHeight(75);
+        paperBtn.setMaxWidth(75);
+        ImageView paperBG = new ImageView(paperImg);
+        paperBG.setFitHeight(75);
+        paperBG.setFitWidth(75);
+        paperBtn.setGraphic(paperBG);
+
+        //scissors
+        Image scissorsImg = new Image(getClass().getResourceAsStream("./Resources/scissors.jpg"));
+        Button scissorsBtn = new Button();
+        scissorsBtn.setMaxHeight(75);
+        scissorsBtn.setMaxWidth(75);
+        ImageView scissorsBG = new ImageView(scissorsImg);
+        scissorsBG.setFitHeight(75);
+        scissorsBG.setFitWidth(75);
+        scissorsBtn.setGraphic(scissorsBG);
+
+        //lizard
+        Image lizardImg = new Image(getClass().getResourceAsStream("./Resources/lizard.jpg"));
+        Button lizardBtn = new Button();
+        lizardBtn.setMaxHeight(75);
+        lizardBtn.setMaxWidth(75);
+        ImageView lizardBG = new ImageView(lizardImg);
+        lizardBG.setFitHeight(75);
+        lizardBG.setFitWidth(75);
+        lizardBtn.setGraphic(lizardBG);
+
+        //spock
+        Image spockImg = new Image(getClass().getResourceAsStream("./Resources/spock.jpg"));
+        Button spockBtn = new Button();
+        spockBtn.setMaxHeight(75);
+        spockBtn.setMaxWidth(75);
+        ImageView spockBG = new ImageView(spockImg);
+        spockBG.setFitHeight(75);
+        spockBG.setFitWidth(75);
+        spockBtn.setGraphic(spockBG);
+
+        //Setup our play buttons so that they interact with the server
+        rockBtn.setOnMouseClicked(e ->{
+            listener.getOut().println("!MOVE 1");
+            gameTextLog.getChildren().add(new Label("You played Rock!"));
+            listener.getOut().flush();
+        });
+        paperBtn.setOnMouseClicked(e ->{
+            listener.getOut().println("!MOVE 3");
+            gameTextLog.getChildren().add(new Label("You played Paper!"));
+            listener.getOut().flush();
+        });
+        scissorsBtn.setOnMouseClicked(e->{
+            listener.getOut().println("!MOVE 2");
+            gameTextLog.getChildren().add(new Label("You played Scissors!"));
+            listener.getOut().flush();
+        });
+        lizardBtn.setOnMouseClicked(e->{
+            listener.getOut().println("!MOVE 4");
+            gameTextLog.getChildren().add(new Label("You played Lizard!"));
+            listener.getOut().flush();
+        });
+        spockBtn.setOnMouseClicked(e->{
+            listener.getOut().println("!MOVE 5");
+            gameTextLog.getChildren().add(new Label("You played Spock!"));
+            listener.getOut().flush();
+        });
+
+        HBox buttonBox = new HBox();
+        buttonBox.getChildren().addAll(rockBtn,paperBtn,scissorsBtn,lizardBtn,spockBtn);
+        return buttonBox;
+    }
+
+    //Setup the lobby UI
+    public void setupLobbyGUI(){
+        this.gameLog = new VBox();
+        this.gameTextLog = new VBox();
+        //We run this in a runlater to prevent thread issues with JAVAFX
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                fullContainer.getChildren().clear();
+
+                //Setup the vboxes to hold game state
+                VBox gameContainer = new VBox();
+                VBox gameControls = new VBox();
+
+                gameContainer.setMinWidth(500);
+
+                //Add the controls
+                gameControls.getChildren().add(setupGameButtons());
+                gameControls.getChildren().add(gameTextLog);
+
+                //Create the box where we will log data for the game
+                Label gameLogLabel = new Label("Game Log:");
+
+                gameContainer.getChildren().addAll(gameLogLabel,gameLog);
+                fullContainer.getChildren().addAll(gameContainer,gameControls);
+            }
+        });
+    }
+
+    //Converts a integer representation of a play
+    //to it's string representation
+    private String intToPlayString(int val){
+        if(val == 1){
+            return "Rock";
+        }else if(val == 2){
+            return "Scissors";
+        }else if(val == 3){
+            return "Paper";
+        }else if(val == 4){
+            return "Lizard";
+        }else if(val == 5){
+            return "Spock";
+        }
+        return "ERROR";
+    }
+
     //Setup the text area for chatting
     public Scene setupChatGUI(){
         BorderPane chatPane = new BorderPane();
@@ -88,6 +223,7 @@ public class Client extends Application {
         VBox container = new VBox();
         VBox playerList = new VBox();
         HBox fullContainer = new HBox();
+        this.fullContainer = fullContainer;
 
         //Create the box where we will log data from server
         Label serverLabel = new Label("Server Log:");
@@ -121,6 +257,27 @@ public class Client extends Application {
         chatPane.setCenter(fullContainer);
 
         return new Scene(chatPane,1000,500);
+    }
+
+    private ImageView moveIntToPlayIcon(int move){
+        ImageView image = null;
+        if(move == 1){
+            Image rockImg = new Image(getClass().getResourceAsStream("./Resources/rock.png"),75,75,false,false);
+            image = new ImageView(rockImg);
+        }else if(move == 2){
+            Image scissorsImg = new Image(getClass().getResourceAsStream("./Resources/scissors.jpg"),75,75,false,false);
+            image = new ImageView(scissorsImg);
+        }else if(move == 3){
+            Image paperImg = new Image(getClass().getResourceAsStream("./Resources/paper.png"),75,75,false,false);
+            image = new ImageView(paperImg);
+        }else if(move == 4){
+            Image lizardImg = new Image(getClass().getResourceAsStream("./Resources/lizard.jpg"),75,75,false,false);
+            image = new ImageView(lizardImg);
+        }else{
+            Image spockImg = new Image(getClass().getResourceAsStream("./Resources/spock.jpg"),75,75,false,false);
+            image = new ImageView(spockImg);
+        }
+        return image;
     }
 
     //Setup the gui for our first UI where we ask for a port, IP, and username
@@ -266,6 +423,67 @@ public class Client extends Application {
                                 @Override
                                 public void run() {
                                     challengeField.setText(data);
+                                }
+                            });
+
+                        }else if(dataFromServer.contains("!STARTGAME")) {
+                            setupLobbyGUI();
+                        }else if(dataFromServer.contains("!GAMELOG")){
+                            HBox box = new HBox();
+                            box.setSpacing(2.5);
+                            String choppedString = dataFromServer.replaceAll("[\\D]", "");
+                            int move1 = Character.getNumericValue(choppedString.charAt(0));
+                            int move2 = Character.getNumericValue(choppedString.charAt(1));
+                            int won = Character.getNumericValue(choppedString.charAt(2));
+
+                            if(won == 1){
+                                box.setStyle("" +
+                                        "-fx-border-color: green;\n" +
+                                        "-fx-border-insets: 5;\n" +
+                                        "-fx-border-width: 3;\n" +
+                                        "-fx-border-style: dashed;\n");
+                            }else if(won == 0){
+                                box.setStyle("" +
+                                        "-fx-border-color: red;\n" +
+                                        "-fx-border-insets: 5;\n" +
+                                        "-fx-border-width: 3;\n" +
+                                        "-fx-border-style: dashed;\n");
+                            }
+
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Tell the user what the opponent played
+                                    gameTextLog.getChildren().add(new Label("Your opponent played " + intToPlayString((move2))));
+
+                                    //Add an element to show the last round of play
+                                    box.getChildren().add(moveIntToPlayIcon(move1));
+                                    Label vs = new Label("VS.");
+                                    vs.setMinHeight(75);
+                                    box.getChildren().add(vs);
+                                    box.getChildren().add(moveIntToPlayIcon(move2));
+                                    gameLog.getChildren().add(box);
+
+                                    String logStr = "";
+                                    //label for if we won or lost
+                                    Label winLoss = new Label();
+                                    if(won == 1){
+                                        winLoss.setText("WON");
+                                        logStr = "You won!";
+                                    }else if(won == 0){
+                                        winLoss.setText("LOST");
+                                        logStr = "You lost!";
+                                    }else{
+                                        winLoss.setText("TIE");
+                                        logStr = "Game ended in a tie!";
+                                    }
+
+                                    winLoss.setMinHeight(75);
+
+                                    //set gamelog message to inform winner and loser
+                                    gameTextLog.getChildren().add(new Label(logStr));
+
+                                    box.getChildren().add(winLoss);
                                 }
                             });
 
