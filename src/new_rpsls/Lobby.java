@@ -29,9 +29,12 @@ public class Lobby {
 
     private boolean gameIsActive = false;
 
+    //Hold the server
+    Server server;
 
 
-    public Lobby(ClientThread client1, ClientThread waitingClient){
+
+    public Lobby(ClientThread client1, ClientThread waitingClient, Server server){
         this.client1 = client1;
         //Take the user, tell them their in a lobby
         //Also add a reference to this lobby
@@ -40,6 +43,9 @@ public class Lobby {
 
         //Reference to the client we are waiting on
         this.waitingClient = waitingClient;
+
+        //Add reference to server
+        this.server = server;
     }
 
     /*
@@ -94,6 +100,9 @@ public class Lobby {
             sender.setQueuedMessage("");
         }else if(input.contains("!REPLAY")){
 
+            //Set this so the server doesn't process our input
+            command = playerCommand.MOVE;
+
             //Find who sent it and ready them up
             if(sender == client1){
                 client1Ready = true;
@@ -109,8 +118,8 @@ public class Lobby {
                 startGame();
             }
 
-        }else if(input.contains("!QUIT")){
-
+        }else if(input.contains("!QUITLOBBY")){
+            destoryLobby(sender);
         }
         return command;
     }
@@ -124,6 +133,9 @@ public class Lobby {
 
         client1.resetLobbyStatus();
         client2.resetLobbyStatus();
+
+        client1.setQueuedMessage("");
+        client2.setQueuedMessage("");
     }
 
     //Determine the winner of the game
@@ -252,6 +264,7 @@ public class Lobby {
             client1Wins = 0;
             client2Wins = 0;
 
+            server.sendToAll(winner.getUserName() + " has beaten " + loser.getUserName() + " in a game!");
 
             gameIsActive = false;
         }

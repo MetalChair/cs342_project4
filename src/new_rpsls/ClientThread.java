@@ -107,6 +107,10 @@ public class ClientThread implements Runnable{
         this.queuedMessage = queuedMessage;
     }
 
+    public int getScore() {
+        return score;
+    }
+
     public ClientThread(Socket socket, BufferedReader in, PrintWriter out) {
         this.socket = socket;
         this.in = in;
@@ -131,18 +135,22 @@ public class ClientThread implements Runnable{
                 System.out.println(queuedMessage);
                 //Handle case for if we've recieved a !USER command
                 if(data.contains("!USER ") && data.substring(0,6).equals("!USER ")) {
-                    this.hasChangedName = true;
-                    System.out.println("Client has asked to change name");
-                    //If we don't have a username, set it and notify the server
-                    if (this.userName == "UNSET") {
-                        queuedMessage = data.substring(6) + " has connected!";
-                    } else {
-                        queuedMessage = userName + " has changed their name to " + data.substring(6);
+                    if(!data.contains(",") && !data.contains(";")){
+                        this.hasChangedName = true;
+                        System.out.println("Client has asked to change name");
+                        //If we don't have a username, set it and notify the server
+                        if (this.userName == "UNSET") {
+                            queuedMessage = data.substring(6) + " has connected!";
+                        } else {
+                            queuedMessage = userName + " has changed their name to " + data.substring(6);
+                        }
+                        this.userName = data.substring(6);
+                    }else{
+                     this.getOut().println("Names cannot contain , or ;");
+                     this.getOut().flush();
                     }
-                    this.userName = data.substring(6);
                 }else if(data.contains("!CHALLENGE ") && data.substring(0,11).equals("!CHALLENGE ")){
                     //We've recieved a challenge request to challenge
-                    //TODO:Implment challenge handling
                     System.out.println(this.userName + "has challenged a user");
                     //Pass the request to the server
                     queuedMessage = data;

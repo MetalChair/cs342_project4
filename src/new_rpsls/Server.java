@@ -60,6 +60,9 @@ public class Server extends Application{
         }
         return null;
     }
+    public void updatePlayerList(){
+        sendConnectedPlayersList(getConnectedPlayersList());
+    }
     private void sendConnectedPlayersList(String list){
         sendToAll(list);
     }
@@ -70,7 +73,7 @@ public class Server extends Application{
     private String getConnectedPlayersList(){
         String clientList = "!CLIENTS ";
         for(int i =0; i < clients.size(); i++){
-            clientList += clients.get(i).getUserName() + ",";
+            clientList += clients.get(i).getUserName() + ";" + clients.get(i).getScore() + ",";
             //We've acknowledged the name change at this point
             //So we tell the thread that the change as been reflected
             clients.get(i).hasChangedName = false;
@@ -143,23 +146,23 @@ public class Server extends Application{
                             //If we have a queued message, send it and nullify it
                             if(currMessage != ""){
                                 //Handle if we got a challenge command
-                                if(currMessage.contains("!CHALLENGE")){
+                                if(currMessage.contains("!CHALLENGE")) {
                                     //Splice to get the username
                                     String challengedUser = currMessage.substring(11);
                                     ClientThread challenge = findByUsername(challengedUser);
-                                    if(challenge != null){
+                                    if (challenge != null) {
                                         //Check we're not trying to challenge ourself
-                                        if(challenge == clients.get(i)){
+                                        if (challenge == clients.get(i)) {
                                             //Notify ourselves if we do
                                             sendToUser(clients.get(i), "!CHALLENGE You can't challenge yourself. Idiot.");
-                                        }else if(challenge.getChallenger() != null || challenge.getCurrentLobby() != null){
+                                        } else if (challenge.getChallenger() != null || challenge.getCurrentLobby() != null) {
                                             //If the user has already been challenged, tell our client
                                             sendToUser(clients.get(i), "!CHALLENGE This user has a pending challenge already! Wait for a minute");
-                                        }else{
+                                        } else {
                                             //Else, setup the challenge
-                                            sendToUser(challenge,"!CHALLENGE " + clients.get(i).getUserName() + " has challenged you to a game!");
+                                            sendToUser(challenge, "!CHALLENGE " + clients.get(i).getUserName() + " has challenged you to a game!");
                                             //We now put the user into a new lobby
-                                            new Lobby(clients.get(i),challenge);
+                                            new Lobby(clients.get(i), challenge, this);
 
                                             //Notify the challenger that we have recieved their request
                                             clients.get(i).getOut().println("!CHALLENGE Awaiting response from " + challengedUser);
@@ -169,6 +172,8 @@ public class Server extends Application{
                                             //TODO:this bit
                                         }
                                     }
+                                }else if(currMessage.contains("!GETCLIENTLIST")){
+                                    sendConnectedPlayersList(getConnectedPlayersList());
                                 }else{
                                     //If the client message isn't a challenge, just send it to everyone
                                     //This is essentially IRC function

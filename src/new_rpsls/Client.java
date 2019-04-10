@@ -35,9 +35,10 @@ public class Client extends Application {
     private TextArea connectedPlayers;
     private Label challengeField;
     private HBox fullContainer;
-    public VBox gameLog;
-    public VBox gameTextLog;
-    public HBox resetBox;
+    private HBox buttonBox;
+    private VBox gameLog;
+    private VBox gameTextLog;
+    private HBox resetBox;
 
     private void connectToServer(String ip, String port, String userName){
         System.out.println("Ready to connect with this information");
@@ -50,11 +51,11 @@ public class Client extends Application {
                     new PrintWriter(socket.getOutputStream()),
                     userName
             );
+            setupChatGUI();
+
             this.listener = temp;
             new Thread(temp).start();
 
-            //Show the chat box
-            stage.setScene(setupChatGUI());
 
             //We should send the username here when we first open it
             listener.getOut().println("!USER " + userName);
@@ -122,27 +123,39 @@ public class Client extends Application {
         rockBtn.setOnMouseClicked(e ->{
             listener.getOut().println("!MOVE 1");
             listener.getOut().flush();
+            setPlayButtonsAsInactive(true);
         });
         paperBtn.setOnMouseClicked(e ->{
             listener.getOut().println("!MOVE 3");
             listener.getOut().flush();
+            setPlayButtonsAsInactive(true);
         });
         scissorsBtn.setOnMouseClicked(e->{
             listener.getOut().println("!MOVE 2");
             listener.getOut().flush();
+            setPlayButtonsAsInactive(true);
         });
         lizardBtn.setOnMouseClicked(e->{
             listener.getOut().println("!MOVE 4");
             listener.getOut().flush();
+            setPlayButtonsAsInactive(true);
         });
         spockBtn.setOnMouseClicked(e->{
             listener.getOut().println("!MOVE 5");
             listener.getOut().flush();
+            setPlayButtonsAsInactive(true);
         });
 
-        HBox buttonBox = new HBox();
+        this.buttonBox = new HBox();
         buttonBox.getChildren().addAll(rockBtn,paperBtn,scissorsBtn,lizardBtn,spockBtn);
         return buttonBox;
+    }
+
+    //activates/deactivates the play buttons
+    public void setPlayButtonsAsInactive(boolean state){
+        for(int i = 0; i < buttonBox.getChildren().size(); i++){
+            buttonBox.getChildren().get(i).setDisable(state);
+        }
     }
 
     //Setup the lobby UI
@@ -169,15 +182,7 @@ public class Client extends Application {
                 VBox gameContainer = new VBox();
                 VBox gameControls = new VBox();
 
-                gameContainer.setMinWidth(500);
-
-                //Add the controls
-                gameControls.getChildren().add(resetBox);
-                gameControls.getChildren().add(setupGameButtons());
-                gameControls.getChildren().add(scrollableGameTextLog);
-
-                //Create the box where we will log data for the game
-                Label gameLogLabel = new Label("Game Log:");
+                gameContainer.setMinWidth(225);
 
                 //Create a button for resetting and quitting lobby
                 Button reset = new Button("Reset");
@@ -189,7 +194,7 @@ public class Client extends Application {
 
                 Button quit = new Button("Quit");
                 quit.setOnAction(e->{
-                    listener.getOut().println("!QUIT");
+                    listener.getOut().println("!QUITLOBBY");
                     resetBox.setVisible(false);
                     listener.getOut().flush();
                 });
@@ -200,6 +205,14 @@ public class Client extends Application {
                 resetBox.getChildren().addAll(reset,quit);
 
                 resetBox.setVisible(false);
+
+                //Add the controls
+                gameControls.getChildren().add(resetBox);
+                gameControls.getChildren().add(setupGameButtons());
+                gameControls.getChildren().add(scrollableGameTextLog);
+
+                //Create the box where we will log data for the game
+                Label gameLogLabel = new Label("Game Log:");
 
                 gameContainer.getChildren().addAll(gameLogLabel,scrollableGameLog);
                 fullContainer.getChildren().addAll(gameContainer,gameControls);
@@ -225,7 +238,7 @@ public class Client extends Application {
     }
 
     //Setup the text area for chatting
-    public Scene setupChatGUI(){
+    public void setupChatGUI(){
         BorderPane chatPane = new BorderPane();
         chatPane.setPadding(new Insets(5,5,5,5));
 
@@ -268,7 +281,10 @@ public class Client extends Application {
         });
 
         //Create the bcx for showing all currently connected players
-        Label connected = new Label("Players Online:");
+        String onlineString = "Players Online:";
+        onlineString = String.format("%-59s",onlineString);
+        onlineString += "Score:";
+        Label connected = new Label(onlineString);
         connectedPlayers = new TextArea();
         connectedPlayers.setEditable(false);
         playerList.getChildren().addAll(connected,connectedPlayers);
@@ -282,7 +298,7 @@ public class Client extends Application {
         //Set the secene
         chatPane.setCenter(fullContainer);
 
-        return new Scene(chatPane,1000,500);
+        this.stage.setScene(new Scene(chatPane,700,500));
     }
 
     private ImageView moveIntToPlayIcon(int move){
@@ -307,7 +323,7 @@ public class Client extends Application {
     }
 
     //Setup the gui for our first UI where we ask for a port, IP, and username
-    public Scene setupClientInfoUI(){
+    public void setupClientInfoUI(){
         BorderPane clientPane = new BorderPane();
         clientPane.setPadding(new Insets(5,5,5,5));
         VBox container = new VBox();
@@ -336,7 +352,7 @@ public class Client extends Application {
 
         //Create a scene and return it
         Scene newScene = new Scene(clientPane,700,500);
-        return newScene;
+        this.stage.setScene(newScene);
     }
 
     public static void main(String[] args){
@@ -365,7 +381,7 @@ public class Client extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.stage = primaryStage;
-        primaryStage.setScene(setupClientInfoUI());
+        setupClientInfoUI();
         primaryStage.show();
     }
 
@@ -439,7 +455,10 @@ public class Client extends Application {
                             //Clear our box and add all the names
                             connectedPlayers.clear();
                             for (int i = 0; i < nameList.size(); i++) {
-                                connectedPlayers.appendText(nameList.get(i) + "\n");
+                                String name = nameList.get(i).substring(0,nameList.get(i).indexOf(";"));
+                                name = String.format("%-64s", name);
+                                name += nameList.get(i).substring(nameList.get(i).indexOf(";") + 1);
+                                connectedPlayers.appendText(name + "\n");
                             }
                         } else if (dataFromServer.contains("!CHALLENGE ")) {
                             //Create string so we can set it in a Runnable
@@ -512,6 +531,8 @@ public class Client extends Application {
                                 }
                             });
 
+                            setPlayButtonsAsInactive(false);
+
                         } else if (dataFromServer.contains("!TEXTLOG")) {
                             String append = dataFromServer.substring(9);
                             Platform.runLater(new Runnable() {
@@ -521,7 +542,15 @@ public class Client extends Application {
                                 }
                             });
                         } else if (dataFromServer.contains("!ENDLOBBY")) {
-                            setupChatGUI();
+                            System.out.println("Resetting chat ui");
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    setupChatGUI();
+                                }
+                            });
+                            this.getOut().println("!GETCLIENTLIST");
+                            this.getOut().flush();
                         } else if (dataFromServer.contains("!SHOWRESETBOX")){
                             System.out.println("Showing reset box");
                             resetBox.setVisible(true);
@@ -533,6 +562,7 @@ public class Client extends Application {
                     }
                 }catch(Exception e){
                     e.printStackTrace();
+                    System.exit(99);
                 }
             }
         }
