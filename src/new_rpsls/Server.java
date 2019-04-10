@@ -26,21 +26,42 @@ public class Server extends Application{
     }
 
     private void cullDeadConnection(ClientThread client){
+        client.setQueuedMessage("");
+        client.terminate();
         //Kill all our resources
         try{
-            client.in.close();
-            client.out.close();
-            client.socket.close();
+            client.getIn().close();
+            client.getOut().close();
+            client.getSocket().close();
         }catch (Exception e){
             e.printStackTrace();
         }
+        //Update all the other player's lists of currently connected users
+        sendConnectedPlayersList(getConnectedPlayersList());
     }
 
-    private void sendToAll(String message){
+    void sendToAll(String message){
         for(int i = 0; i < clients.size(); i++){
             clients.get(i).getOut().println(message);
             clients.get(i).getOut().flush();
         }
+    }
+
+    private void sendToUser(ClientThread user, String message){
+        user.getOut().println(message);
+        user.getOut().flush();
+    }
+
+    private ClientThread findByUsername(String name){
+        for(int i = 0; i < clients.size(); i++){
+            if(clients.get(i).getUserName().equals(name)){
+                return clients.get(i);
+            }
+        }
+        return null;
+    }
+    public void updatePlayerList(){
+        sendConnectedPlayersList(getConnectedPlayersList());
     }
     private void sendConnectedPlayersList(String list){
         sendToAll(list);
@@ -52,7 +73,7 @@ public class Server extends Application{
     private String getConnectedPlayersList(){
         String clientList = "!CLIENTS ";
         for(int i =0; i < clients.size(); i++){
-            clientList += clients.get(i).userName + ",";
+            clientList += clients.get(i).getUserName() + ";" + clients.get(i).getScore() + ",";
             //We've acknowledged the name change at this point
             //So we tell the thread that the change as been reflected
             clients.get(i).hasChangedName = false;
@@ -79,7 +100,7 @@ public class Server extends Application{
                             ClientThread temp = new ClientThread(
                                     newClient,
                                     new BufferedReader(new InputStreamReader(newClient.getInputStream())),
-                                    new PrintWriter(newClient.getOutputStream())
+                                    new PrintWriter(newClient.getOutputStream(),true)
                             );
 
                             clients.add(temp);
@@ -103,10 +124,78 @@ public class Server extends Application{
                         //Look through all the clients to see if they have a queued message
                         //Or if we need to rebuild the connected players list
                         for(int i = 0; i < clients.size(); i++){
+                            String currMessage = clients.get(i).getQueuedMessage();
+                            //If our client has been challenged or is in a lobby
+                            //We want to first ensure they are not sending a message
+                            //That is meant only for that game lobby
+                            if(clients.get(i).isInLobby() || clients.get(i).getChallenger() != null){
+                                //Figure out if the current player is in the lobby or if the challenger is
+                                Lobby lobby =
+                                (clients.get(i).isInLobby()) ?
+                                clients.get(i).getCurrentLobby() :
+                                clients.get(i).getChallenger().getCurrentLobby();
+
+                                Lobby.playerCommand command = lobby.proccessInput(currMessage,clients.get(i));
+
+                                if(command != Lobby.playerCommand.NONE){
+                                    //This loop only cares if we have a command that should be handled by the lobby
+                                    //all other player commands will be handled in the lobby class
+                                    break;
+                                }
+                            }
                             //If we have a queued message, send it and nullify it
-                            if(clients.get(i).queuedMessage != ""){
-                                sendToAll(clients.get(i).queuedMessage);
-                                clients.get(i).queuedMessage = "";
+                            if(currMessage != ""){
+                                //Handle if we got a challenge command
+                                if(currMessage.contains("!CHALLENGE")) {
+                                    //Splice to get the username
+                                    String challengedUser = currMessage.substring(11);
+                                    ClientThread challenge = findByUsername(challengedUser);
+                                    if (challenge != null) {
+                                        //Check we're not trying to challenge ourself
+                                        if (challenge == clients.get(i)) {
+                                            //Notify ourselves if we do
+                                            sendToUser(clients.get(i), "!CHALLENGE You can't challenge yourself. Idiot.");
+                                        } else if (challenge.getChallenger() != null || challenge.getCurrentLobby() != null) {
+                                            //If the user has already been challenged, tell our client
+                                            sendToUser(clients.get(i), "!CHALLENGE This user has a pending challenge already! Wait for a minute");
+                                        } else {
+                                            //Else, setup the challenge
+                                            sendToUser(challenge, "!CHALLENGE " + clients.get(i).getUserName() + " has challenged you to a game!");
+                                            //We now put the user into a new lobby
+                                            new Lobby(clients.get(i), challenge, this);
+
+                                            //Notify the challenger that we have recieved their request
+                                            clients.get(i).getOut().println("!CHALLENGE Awaiting response from " + challengedUser);
+                                            clients.get(i).getOut().flush();
+
+                                            challenge.setChallenger(clients.get(i));
+                                            //TODO:this bit
+                                        }
+                                    }
+                                }else if(currMessage.contains("!GETCLIENTLIST")){
+                                    sendConnectedPlayersList(getConnectedPlayersList());
+                                }else{
+                                    //If the client message isn't a challenge, just send it to everyone
+                                    //This is essentially IRC function
+                                    //We add a check to ensure users aren't using our keywords
+                                    //This could be changed to use objects but... idc
+                                    if( !currMessage.contains("!STARTGAME")     &&
+                                        !currMessage.contains("!GAMELOG")       &&
+                                        !currMessage.contains("!TEXTLOG")       &&
+                                        !currMessage.contains("!MOVE")          &&
+                                        !currMessage.contains("!ENDLOBBY")      &&
+                                        !currMessage.contains("!QUIT")          &&
+                                        !currMessage.contains("!SHOWRESETBOX")
+                                    ){
+                                        sendToAll(currMessage);
+                                    }else{
+                                        clients.get(i).getOut().println("Server: You can't use that command!");
+                                        clients.get(i).getOut().flush();
+                                    }
+                                }
+                                //Nullify any queued messages
+                                clients.get(i).setQueuedMessage("");
+
                             //If we changed a name, rebuild our list and notify everyone
                             }else if(clients.get(i).hasChangedName){
                                 System.out.println("A client has changed names, we need to reflect this");
@@ -115,7 +204,6 @@ public class Server extends Application{
                             //If we lost a connection, cull the population
                             else if(clients.get(i).isKill){
                                 cullDeadConnection(clients.get(i));
-                                clients.get(i).terminate();
                                 clients.remove(i);
                                 sendConnectedPlayersList(getConnectedPlayersList());
                             }
@@ -126,100 +214,5 @@ public class Server extends Application{
                 e.printStackTrace();
             }
         }).start();
-    }
-
-    //Nested class holding client thread
-    class ClientThread implements Runnable{
-
-        //Are we still running
-        private boolean running = true;
-
-        volatile private Socket socket;
-        volatile private BufferedReader in;
-        volatile private PrintWriter out;
-        volatile private String userName = "UNSET";
-        //Each client has a queued message that we iterate through in the server thread
-        //If the message isn't empty, we'll send it
-        volatile private String queuedMessage = "";
-
-        //Tells us if we've changed names since the last server update
-        volatile boolean hasChangedName;
-
-        //Our clients notify us when they die using this boolean
-        volatile boolean isKill = false;
-
-        public Socket getSocket() {
-            return socket;
-        }
-
-        public void setSocket(Socket socket) {
-            this.socket = socket;
-        }
-
-        public BufferedReader getIn() {
-            return in;
-        }
-
-        public void setIn(BufferedReader in) {
-            this.in = in;
-        }
-
-        public PrintWriter getOut() {
-            return out;
-        }
-
-        public void setOut(PrintWriter out) {
-            this.out = out;
-        }
-
-        public void terminate(){
-            running = false;
-        }
-
-        public ClientThread(Socket socket, BufferedReader in, PrintWriter out) {
-            this.socket = socket;
-            this.in = in;
-            this.out = out;
-        }
-
-        //Override the run method
-        @Override
-        public void run() {
-            //For each client thread execute this loop
-            while(running){
-                //Listen for input data
-                try{
-                    String data = in.readLine();
-                    System.out.println("Got data from a client: " + data);
-                    System.out.println(queuedMessage);
-                    //Handle case for if we've recieved a !USER command
-                    if(data.contains("!USER ") && data.substring(0,6).equals("!USER ")) {
-                        this.hasChangedName = true;
-                        System.out.println("Client has asked to change name");
-                        //If we don't have a username, set it and notify the server
-                        if (this.userName == "UNSET") {
-                            queuedMessage = data.substring(6) + " has connected!";
-                        } else {
-                            queuedMessage = userName + " has changed their name to " + data.substring(6);
-                        }
-                        this.userName = data.substring(6);
-                    }else if(data.contains("!CHALLENGE ") && data.substring(0,11).equals("!CHALLENGE ")){
-                        //We've recieved a challenge request to challenge
-                        //TODO:Implment challenge handling
-                        System.out.println(this.userName + "has challenged a user");
-                    }else if(data.equals("!QUIT")){
-                        //We've recieved a quit command so we need to kill this thread
-                        isKill = true;
-
-                        //Notify everyone else that we have a kill message
-                        queuedMessage = userName + " has quit the server!";
-                    }else{
-                        queuedMessage = userName + ": " + data;
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 }
