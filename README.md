@@ -4,8 +4,8 @@ A cool hangout spot for net-savvy folks to play rad games of rock, paper, scisso
 ## Here are the bugs we should take a look at:
 ### TRIPLE PRIORITY IMPORTANT
 1. There's no indication of how to actually play the game so far. The commands are as follows
-  * !CHALLENGE <username> : challenges the user with username currently on the server
-  * !USER <newname>       : sets your username to the newly listed name
+  * !CHALLENGE \<username\> : challenges the user with username currently on the server
+  * !USER \<newname\>       : sets your username to the newly listed name
   * !ACCEPT               : Accepts a currently active challenge
 2. The server has no GUI so far. I'd like to leave a means of running the server in CMD mode by using launch params but we still need to implement the gui
 ##### less important stuff
