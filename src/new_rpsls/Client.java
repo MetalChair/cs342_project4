@@ -1,16 +1,13 @@
 package new_rpsls;
 
 import javafx.application.Platform;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.HBox;
@@ -40,6 +37,7 @@ public class Client extends Application {
     private HBox fullContainer;
     public VBox gameLog;
     public VBox gameTextLog;
+    public HBox resetBox;
 
     private void connectToServer(String ip, String port, String userName){
         System.out.println("Ready to connect with this information");
@@ -123,27 +121,22 @@ public class Client extends Application {
         //Setup our play buttons so that they interact with the server
         rockBtn.setOnMouseClicked(e ->{
             listener.getOut().println("!MOVE 1");
-            gameTextLog.getChildren().add(new Label("You played Rock!"));
             listener.getOut().flush();
         });
         paperBtn.setOnMouseClicked(e ->{
             listener.getOut().println("!MOVE 3");
-            gameTextLog.getChildren().add(new Label("You played Paper!"));
             listener.getOut().flush();
         });
         scissorsBtn.setOnMouseClicked(e->{
             listener.getOut().println("!MOVE 2");
-            gameTextLog.getChildren().add(new Label("You played Scissors!"));
             listener.getOut().flush();
         });
         lizardBtn.setOnMouseClicked(e->{
             listener.getOut().println("!MOVE 4");
-            gameTextLog.getChildren().add(new Label("You played Lizard!"));
             listener.getOut().flush();
         });
         spockBtn.setOnMouseClicked(e->{
             listener.getOut().println("!MOVE 5");
-            gameTextLog.getChildren().add(new Label("You played Spock!"));
             listener.getOut().flush();
         });
 
@@ -154,8 +147,18 @@ public class Client extends Application {
 
     //Setup the lobby UI
     public void setupLobbyGUI(){
+        ScrollPane scrollableGameLog = new ScrollPane();
+        ScrollPane scrollableGameTextLog = new ScrollPane();
+
+        //Make these scrollable in the case theres a very long game
+        scrollableGameLog.setStyle("-fx-background-color: tranparent;");
+        scrollableGameTextLog.setStyle("-fx-background-color: tranparent;");
+
         this.gameLog = new VBox();
         this.gameTextLog = new VBox();
+
+        scrollableGameTextLog.setContent(gameTextLog);
+        scrollableGameLog.setContent(gameLog);
         //We run this in a runlater to prevent thread issues with JAVAFX
         Platform.runLater(new Runnable() {
             @Override
@@ -169,13 +172,36 @@ public class Client extends Application {
                 gameContainer.setMinWidth(500);
 
                 //Add the controls
+                gameControls.getChildren().add(resetBox);
                 gameControls.getChildren().add(setupGameButtons());
-                gameControls.getChildren().add(gameTextLog);
+                gameControls.getChildren().add(scrollableGameTextLog);
 
                 //Create the box where we will log data for the game
                 Label gameLogLabel = new Label("Game Log:");
 
-                gameContainer.getChildren().addAll(gameLogLabel,gameLog);
+                //Create a button for resetting and quitting lobby
+                Button reset = new Button("Reset");
+                reset.setOnAction(e->{
+                    listener.getOut().println("!REPLAY");
+                    resetBox.setVisible(false);
+                    listener.getOut().flush();
+                });
+
+                Button quit = new Button("Quit");
+                quit.setOnAction(e->{
+                    listener.getOut().println("!QUIT");
+                    resetBox.setVisible(false);
+                    listener.getOut().flush();
+                });
+
+                //Add them to their container
+                resetBox = new HBox();
+
+                resetBox.getChildren().addAll(reset,quit);
+
+                resetBox.setVisible(false);
+
+                gameContainer.getChildren().addAll(gameLogLabel,scrollableGameLog);
                 fullContainer.getChildren().addAll(gameContainer,gameControls);
             }
         });
@@ -183,7 +209,7 @@ public class Client extends Application {
 
     //Converts a integer representation of a play
     //to it's string representation
-    private String intToPlayString(int val){
+    public static String intToPlayString(int val){
         if(val == 1){
             return "Rock";
         }else if(val == 2){
@@ -401,12 +427,12 @@ public class Client extends Application {
                     String dataFromServer = in.readLine();
                     System.out.println(dataFromServer);
                     //If we have a log
-                    if(log != null){
+                    if(log != null) {
                         //We need to handle special cases IE, Getting a new client list
                         //Or getting a challenge
 
                         //If we got a new client list
-                        if(dataFromServer.contains("!CLIENTS ") && dataFromServer.substring(0,9).equals("!CLIENTS ")) {
+                        if (dataFromServer.contains("!CLIENTS ") && dataFromServer.substring(0, 9).equals("!CLIENTS ")) {
                             //Split it into a list
                             dataFromServer = dataFromServer.substring(9);
                             List<String> nameList = Arrays.asList(dataFromServer.split(","));
@@ -415,8 +441,7 @@ public class Client extends Application {
                             for (int i = 0; i < nameList.size(); i++) {
                                 connectedPlayers.appendText(nameList.get(i) + "\n");
                             }
-                        }
-                        else if(dataFromServer.contains("!CHALLENGE ")){
+                        } else if (dataFromServer.contains("!CHALLENGE ")) {
                             //Create string so we can set it in a Runnable
                             final String data = dataFromServer.substring(11);
                             Platform.runLater(new Runnable() {
@@ -426,9 +451,9 @@ public class Client extends Application {
                                 }
                             });
 
-                        }else if(dataFromServer.contains("!STARTGAME")) {
+                        } else if (dataFromServer.contains("!STARTGAME")) {
                             setupLobbyGUI();
-                        }else if(dataFromServer.contains("!GAMELOG")){
+                        } else if (dataFromServer.contains("!GAMELOG")) {
                             HBox box = new HBox();
                             box.setSpacing(2.5);
                             String choppedString = dataFromServer.replaceAll("[\\D]", "");
@@ -436,13 +461,13 @@ public class Client extends Application {
                             int move2 = Character.getNumericValue(choppedString.charAt(1));
                             int won = Character.getNumericValue(choppedString.charAt(2));
 
-                            if(won == 1){
+                            if (won == 1) {
                                 box.setStyle("" +
                                         "-fx-border-color: green;\n" +
                                         "-fx-border-insets: 5;\n" +
                                         "-fx-border-width: 3;\n" +
                                         "-fx-border-style: dashed;\n");
-                            }else if(won == 0){
+                            } else if (won == 0) {
                                 box.setStyle("" +
                                         "-fx-border-color: red;\n" +
                                         "-fx-border-insets: 5;\n" +
@@ -467,13 +492,13 @@ public class Client extends Application {
                                     String logStr = "";
                                     //label for if we won or lost
                                     Label winLoss = new Label();
-                                    if(won == 1){
+                                    if (won == 1) {
                                         winLoss.setText("WON");
                                         logStr = "You won!";
-                                    }else if(won == 0){
+                                    } else if (won == 0) {
                                         winLoss.setText("LOST");
                                         logStr = "You lost!";
-                                    }else{
+                                    } else {
                                         winLoss.setText("TIE");
                                         logStr = "Game ended in a tie!";
                                     }
@@ -487,11 +512,23 @@ public class Client extends Application {
                                 }
                             });
 
+                        } else if (dataFromServer.contains("!TEXTLOG")) {
+                            String append = dataFromServer.substring(9);
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    gameTextLog.getChildren().add(new Label(append));
+                                }
+                            });
+                        } else if (dataFromServer.contains("!ENDLOBBY")) {
+                            setupChatGUI();
+                        } else if (dataFromServer.contains("!SHOWRESETBOX")){
+                            System.out.println("Showing reset box");
+                            resetBox.setVisible(true);
                         }else{
                             log.setStyle("");
                             //If we have a basic message, just throw it into the log
                             log.appendText(dataFromServer + "\n");
-
                         }
                     }
                 }catch(Exception e){

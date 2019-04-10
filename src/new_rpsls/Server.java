@@ -40,7 +40,7 @@ public class Server extends Application{
         sendConnectedPlayersList(getConnectedPlayersList());
     }
 
-    private void sendToAll(String message){
+    void sendToAll(String message){
         for(int i = 0; i < clients.size(); i++){
             clients.get(i).getOut().println(message);
             clients.get(i).getOut().flush();
@@ -172,8 +172,16 @@ public class Server extends Application{
                                 }else{
                                     //If the client message isn't a challenge, just send it to everyone
                                     //This is essentially IRC function
-                                    //We add a check to ensure users can't start the game client
-                                    if(!currMessage.contains("!STARTGAME") && !currMessage.contains("!GAMELOG")){
+                                    //We add a check to ensure users aren't using our keywords
+                                    //This could be changed to use objects but... idc
+                                    if( !currMessage.contains("!STARTGAME")     &&
+                                        !currMessage.contains("!GAMELOG")       &&
+                                        !currMessage.contains("!TEXTLOG")       &&
+                                        !currMessage.contains("!MOVE")          &&
+                                        !currMessage.contains("!ENDLOBBY")      &&
+                                        !currMessage.contains("!QUIT")          &&
+                                        !currMessage.contains("!SHOWRESETBOX")
+                                    ){
                                         sendToAll(currMessage);
                                     }else{
                                         clients.get(i).getOut().println("Server: You can't use that command!");

@@ -6,6 +6,9 @@ import java.net.Socket;
 
 public class ClientThread implements Runnable{
 
+    //Hold the number of games the client has won
+    volatile int score = 0;
+
     //Stores the lobby the user is currently in
     volatile private Lobby currentLobby = null;
 
@@ -31,6 +34,10 @@ public class ClientThread implements Runnable{
 
     //Our clients notify us when they die using this boolean
     volatile boolean isKill = false;
+
+    public void increaseScoreByOne(){
+        score++;
+    }
 
     public boolean isInLobby() {
         return isInLobby;

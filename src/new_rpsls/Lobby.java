@@ -7,17 +7,27 @@ public class Lobby {
     }
 
     //Hold the two clients participating in the lobby
-    ClientThread client1;
-    ClientThread client2;
+    private ClientThread client1;
+    private ClientThread client2;
 
     //Holds the moves for the clients
-    int client1Move = 0;
-    int client2Move = 0;
+    private int client1Move = 0;
+    private int client2Move = 0;
+
+    //Holds the number of wins each player has
+    private int client1Wins = 0;
+    private int client2Wins = 0;
+
+    //Has the client rereadied
+    private boolean client1Ready = false;
+    private boolean client2Ready = false;
 
     //Hold moves for users
 
     //Hold a client we are potentially waiting on
-    ClientThread waitingClient;
+    private ClientThread waitingClient;
+
+    private boolean gameIsActive = false;
 
 
 
@@ -62,13 +72,19 @@ public class Lobby {
                 //We should start our game here
                 startGame();
             }
-        }else if(input.contains("!MOVE")){
+        }else if(input.contains("!MOVE") && gameIsActive){
+            int move = 0;
+            move = Integer.parseInt(input.replaceAll("[\\D]", ""));
             //Determine who sent it, set their moves
             if(sender == client1){
-                client1Move = Integer.parseInt(input.replaceAll("[\\D]", ""));
+                client1Move = move;
             }else if(sender == client2){
-                client2Move = Integer.parseInt(input.replaceAll("[\\D]", ""));
+                client2Move = move;
             }
+
+            //Send the play value to the user
+            sender.getOut().println("!TEXTLOG You played " + Client.intToPlayString(move));
+
             command = playerCommand.MOVE;
 
             if(client1Move != 0 && client2Move != 0){
@@ -76,8 +92,38 @@ public class Lobby {
                 determineWinnerAndAddScore();
             }
             sender.setQueuedMessage("");
+        }else if(input.contains("!REPLAY")){
+
+            //Find who sent it and ready them up
+            if(sender == client1){
+                client1Ready = true;
+            }
+
+            if(sender == client2){
+                client2Ready = true;
+            }
+
+            if(client1Ready && client2Ready){
+                client1Ready = false;
+                client2Ready = false;
+                startGame();
+            }
+
+        }else if(input.contains("!QUIT")){
+
         }
         return command;
+    }
+
+    //Destroy the lobby
+    private void destoryLobby(ClientThread initiator){
+        client1.getOut().println("!ENDLOBBY");
+        client1.getOut().flush();
+        client2.getOut().println("!ENDLOBBY");
+        client2.getOut().flush();
+
+        client1.resetLobbyStatus();
+        client2.resetLobbyStatus();
     }
 
     //Determine the winner of the game
@@ -171,16 +217,55 @@ public class Lobby {
         if(client1 == winner){
             client1.getOut().println("!GAMELOG " + client1Move + " " + client2Move + " 1");
             client2.getOut().println("!GAMELOG " + client2Move + " " + client1Move + " 0");
+            client1Wins++;
         }else if(client2 == winner){
             client2.getOut().println("!GAMELOG " + client2Move + " " + client1Move + " 1");
             client1.getOut().println("!GAMELOG " + client1Move + " " + client2Move + " 0");
+            client2Wins++;
         }
 
 
         client1Move = 0;
         client2Move = 0;
 
+        ClientThread threeWinner = checkForThreeWins();
+        if(threeWinner != null){
+            //Notify the winner they one the game
+            threeWinner.getOut().println("!TEXTLOG You WON! Would you like to play again?");
+            threeWinner.getOut().flush();
 
+            //Show them the reset controls
+            winner.getOut().println("!SHOWRESETBOX");
+            winner.getOut().flush();
+
+            //Add to their score
+            threeWinner.increaseScoreByOne();
+
+            //Tell the loser they lost
+            loser.getOut().println("!TEXTLOG You LOST! Would you like to play again?");
+            loser.getOut().flush();
+
+            //Show them the reset controls
+            loser.getOut().println("!SHOWRESETBOX");
+            loser.getOut().flush();
+
+            client1Wins = 0;
+            client2Wins = 0;
+
+
+            gameIsActive = false;
+        }
+
+
+    }
+
+    ClientThread checkForThreeWins(){
+        if(client1Wins == 3){
+            return client1;
+        }else if(client2Wins == 3){
+            return client2;
+        }
+        return null;
     }
 
     //Destroys the lobby when one player has challenged another
@@ -202,6 +287,8 @@ public class Lobby {
 
         client2.getOut().println("!STARTGAME");
         client2.getOut().flush();
+
+        gameIsActive = true;
 
     }
 }
