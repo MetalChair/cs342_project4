@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b1eced06-56cc-4966-8b7e-5b5408f6f15f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$Listener$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$Listener$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$Listener$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$Listener$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$Listener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$Listener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/ClientThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/ClientThread.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Lobby.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Lobby.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Server.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/new_rpsls/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/new_rpsls/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/new_rpsls/ClientThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/new_rpsls/ClientThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/new_rpsls/Lobby.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/new_rpsls/Lobby.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/new_rpsls/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/new_rpsls/Server.java" afterDir="false" />
-    </list>
+    <list default="true" id="b1eced06-56cc-4966-8b7e-5b5408f6f15f" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -312,7 +298,7 @@
       <workItem from="1554574951823" duration="5536000" />
       <workItem from="1554742411070" duration="776000" />
       <workItem from="1554842380147" duration="6915000" />
-      <workItem from="1554857110695" duration="1609000" />
+      <workItem from="1554857110695" duration="2209000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1553807731536</created>
@@ -330,7 +316,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="62736000" />
+    <option name="totallyTimeSpent" value="63336000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
