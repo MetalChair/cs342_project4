@@ -1,10 +1,18 @@
 package new_rpsls;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -14,7 +22,8 @@ import java.util.ArrayList;
 public class Server extends Application{
     //The port that the server runs on
     private int port;
-
+    private Stage stage;
+    private TextArea messages = new TextArea();
     //Hold the server socket
     volatile private ServerSocket server;
 
@@ -81,12 +90,52 @@ public class Server extends Application{
         return clientList;
     }
 
-    //Implement the GUI
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        //Create the server
-        this.server = new ServerSocket(5555);
+    private void startServer(int port) throws Exception{
+        this.server = new ServerSocket(port);
 
+    }
+
+    private Parent serverSetUpScreen(){
+        Text portChoice = new Text("Choose the port to listen into");
+        TextField input = new TextField();
+        Button startButton = new Button("Start Server");
+        startButton.setOnAction(event ->{
+           try {
+               this.port = Integer.parseInt(input.getText());
+               startServer(this.port);
+               this.stage.setScene(new Scene(startGame()));
+               this.stage.show();
+           } catch (NumberFormatException e){
+               e.printStackTrace();
+               portChoice.setText("Only use numbers please.");
+           } catch (Exception e){
+               e.printStackTrace();
+               portChoice.setText("Something went wrong...");
+           }
+        });
+        VBox root = new VBox(20, portChoice, input, startButton);
+        return root;
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+        this.stage = primaryStage;
+        this.stage.setScene(new Scene(serverSetUpScreen()));
+        this.stage.show();
+    }
+
+    public Parent startGame() throws Exception {
+        //Create the server
+       Button endServerButton = new Button("End Server");
+       endServerButton.setOnAction(event -> {
+           sendToAll("!QUIT");
+       });
+       messages.setPrefHeight(550);
+       messages.appendText("Listening in on port: " + this.port + "\n");
+       messages.setEditable(false);
+        HBox topHbox = new HBox(20, endServerButton);
+        VBox root = new VBox(20, topHbox, messages);
+        root.setPrefSize(600, 600);
         //Thread that listens for new server connections
         //We need a new thread to just listen and accept clients
         //Yes nested threads are confusing
@@ -144,7 +193,7 @@ public class Server extends Application{
                                 }
                             }
                             //If we have a queued message, send it and nullify it
-                            if(currMessage != ""){
+                            if(!currMessage.equals("")){
                                 //Handle if we got a challenge command
                                 if(currMessage.contains("!CHALLENGE")) {
                                     //Splice to get the username
@@ -153,19 +202,40 @@ public class Server extends Application{
                                     if (challenge != null) {
                                         //Check we're not trying to challenge ourself
                                         if (challenge == clients.get(i)) {
+                                            final int temp = i;
                                             //Notify ourselves if we do
                                             sendToUser(clients.get(i), "!CHALLENGE You can't challenge yourself. Idiot.");
+                                            Platform.runLater(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    messages.appendText(clients.get(temp).getUserName() + " tried to challenge himself to a game. Loser. \n");
+                                                }
+                                            });
                                         } else if (challenge.getChallenger() != null || challenge.getCurrentLobby() != null) {
+                                            final int temp = i;
                                             //If the user has already been challenged, tell our client
                                             sendToUser(clients.get(i), "!CHALLENGE This user has a pending challenge already! Wait for a minute");
                                         } else {
+                                            final int temp = i;
                                             //Else, setup the challenge
                                             sendToUser(challenge, "!CHALLENGE " + clients.get(i).getUserName() + " has challenged you to a game!");
+                                            Platform.runLater(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    messages.appendText("!CHALLENGE " + clients.get(temp).getUserName() + " has been challenged to a game!");
+                                                }
+                                            });
                                             //We now put the user into a new lobby
                                             new Lobby(clients.get(i), challenge, this);
 
-                                            //Notify the challenger that we have recieved their request
+                                            //Notify the challenger that we have received their request
                                             clients.get(i).getOut().println("!CHALLENGE Awaiting response from " + challengedUser);
+                                            Platform.runLater(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    messages.appendText(clients.get(temp).getUserName() + " challenged " + challengedUser + ". Awaiting response. \n");
+                                                }
+                                            });
                                             clients.get(i).getOut().flush();
 
                                             challenge.setChallenger(clients.get(i));
@@ -189,7 +259,14 @@ public class Server extends Application{
                                     ){
                                         sendToAll(currMessage);
                                     }else{
+                                        final int temp = i;
                                         clients.get(i).getOut().println("Server: You can't use that command!");
+                                        Platform.runLater(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                messages.appendText(clients.get(temp).getUserName() + " tried to use an unknown command. \n");
+                                            }
+                                        });
                                         clients.get(i).getOut().flush();
                                     }
                                 }
@@ -199,6 +276,12 @@ public class Server extends Application{
                             //If we changed a name, rebuild our list and notify everyone
                             }else if(clients.get(i).hasChangedName){
                                 System.out.println("A client has changed names, we need to reflect this");
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        messages.appendText("A client has changed names, we need to reflect this \n");
+                                    }
+                                });
                                 sendConnectedPlayersList(getConnectedPlayersList());
                             }
                             //If we lost a connection, cull the population
@@ -214,5 +297,6 @@ public class Server extends Application{
                 e.printStackTrace();
             }
         }).start();
+        return root;
     }
 }
