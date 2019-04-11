@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b1eced06-56cc-4966-8b7e-5b5408f6f15f" name="Default Changelist" comment="Added commands in the bottom right corner of the user gui">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpsls_remake.iml" beforeDir="false" afterPath="$PROJECT_DIR$/rpsls_remake.iml" afterDir="false" />
+    <list default="true" id="b1eced06-56cc-4966-8b7e-5b5408f6f15f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$Listener$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$Listener$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$Listener$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$Listener$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$Listener$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$Listener$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$Listener$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$Listener$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$Listener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client$Listener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Client.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/new_rpsls/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/new_rpsls/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/new_rpsls/Resources/lizard.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/new_rpsls/Resources/scissors.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/new_rpsls/Resources/spock.jpg" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -50,20 +57,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/new_rpsls/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="205">
-              <caret line="298" column="35" lean-forward="true" selection-start-line="298" selection-start-column="35" selection-end-line="298" selection-end-column="35" />
+            <state relative-caret-position="256">
+              <caret line="94" column="37" lean-forward="true" selection-start-line="94" selection-start-column="37" selection-end-line="94" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/new_rpsls/Lobby.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="647">
-              <caret line="102" column="62" selection-start-line="102" selection-start-column="62" selection-end-line="102" selection-end-column="62" />
             </state>
           </provider>
         </entry>
@@ -172,6 +170,13 @@
               <item name="cs342_project4" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="new_rpsls" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="cs342_project4" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cs342_project4" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="new_rpsls" type="462c0819:PsiDirectoryNode" />
+              <item name="Resources" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -331,7 +336,14 @@
       <option name="project" value="LOCAL" />
       <updated>1553807731536</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added commands in the bottom right corner of the user gui">
+      <created>1554942471720</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1554942471721</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -355,7 +367,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3286119" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.50067115" side_tool="true" weight="0.3286119" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.50067115" side_tool="true" visible="true" weight="0.3286119" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3990647" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -364,7 +376,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49932885" weight="0.3286119" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Terminal" order="10" />
-      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.504698" side_tool="true" visible="true" weight="0.32719547" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.504698" side_tool="true" weight="0.32719547" />
       <window_info anchor="bottom" id="Messages" order="12" sideWeight="0.49530202" weight="0.32719547" />
       <window_info anchor="right" id="Coverage" order="0" side_tool="true" weight="0.3295302" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="1" type="SLIDING" weight="0.4" />
@@ -532,10 +544,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/new_rpsls/Resources/rock.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/new_rpsls/Resources/spock.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/new_rpsls/Resources/scissors.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/new_rpsls/Resources/paper.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/new_rpsls/Resources/lizard.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/new_rpsls/Resources/lizard.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/new_rpsls/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="298" column="35" lean-forward="true" selection-start-line="298" selection-start-column="35" selection-end-line="298" selection-end-column="35" />
+        <state relative-caret-position="256">
+          <caret line="94" column="37" lean-forward="true" selection-start-line="94" selection-start-column="37" selection-end-line="94" selection-end-column="37" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
