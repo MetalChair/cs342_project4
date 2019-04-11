@@ -289,13 +289,26 @@ public class Client extends Application {
         connectedPlayers.setEditable(false);
         playerList.getChildren().addAll(connected,connectedPlayers);
 
+        //create the box for showing all the rules and commands the users can do
+        TextArea RuleBox = new TextArea("The commands are as follows:\n" +
+                "  -> !CHALLENGE <username> : challenges the user with username currently on the server\n" +
+                "  -> !USER <newname> : sets your username to the newly listed name\n" +
+                "  -> !ACCEPT : Accepts a currently active challenge\n");
+        RuleBox.setPrefHeight(195);
+        RuleBox.setPrefWidth(200);
+        RuleBox.setEditable(false);
+        RuleBox.setWrapText(true);
+
+        VBox VBoxRuleNPlayerLog = new VBox();
+        VBoxRuleNPlayerLog.getChildren().addAll(playerList, RuleBox);
+
         //Challenge text
         challengeField = new Label("");
         challengeField.setTextFill(Color.rgb(255,0,0));
-        fullContainer.getChildren().addAll(container,playerList);
+        fullContainer.getChildren().addAll(container,VBoxRuleNPlayerLog);
         container.getChildren().addAll(serverLabel,log,input,challengeField);
 
-        //Set the secene
+        //Set the scene
         chatPane.setCenter(fullContainer);
 
         this.stage.setScene(new Scene(chatPane,700,500));
