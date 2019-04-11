@@ -90,7 +90,7 @@ public class Client extends Application {
         paperBtn.setGraphic(paperBG);
 
         //scissors
-        Image scissorsImg = new Image(getClass().getResourceAsStream("./Resources/scissors.jpg"));
+        Image scissorsImg = new Image(getClass().getResourceAsStream("./Resources/scissors.png"));
         Button scissorsBtn = new Button();
         scissorsBtn.setMaxHeight(75);
         scissorsBtn.setMaxWidth(75);
@@ -100,7 +100,7 @@ public class Client extends Application {
         scissorsBtn.setGraphic(scissorsBG);
 
         //lizard
-        Image lizardImg = new Image(getClass().getResourceAsStream("./Resources/lizard.jpg"));
+        Image lizardImg = new Image(getClass().getResourceAsStream("./Resources/lizard.png"));
         Button lizardBtn = new Button();
         lizardBtn.setMaxHeight(75);
         lizardBtn.setMaxWidth(75);
@@ -110,7 +110,7 @@ public class Client extends Application {
         lizardBtn.setGraphic(lizardBG);
 
         //spock
-        Image spockImg = new Image(getClass().getResourceAsStream("./Resources/spock.jpg"));
+        Image spockImg = new Image(getClass().getResourceAsStream("./Resources/spock.png"));
         Button spockBtn = new Button();
         spockBtn.setMaxHeight(75);
         spockBtn.setMaxWidth(75);
