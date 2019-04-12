@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b1eced06-56cc-4966-8b7e-5b5408f6f15f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/META-INF/rpsls_remake.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Lobby$playerCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Lobby$playerCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Lobby.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Lobby.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rpsls_remake/new_rpsls/Server.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/new_rpsls/Lobby.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/new_rpsls/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/new_rpsls/Server.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -21,20 +23,19 @@
     <option name="myElementSize" value="215" />
   </component>
   <component name="DefaultGradleProjectSettings">
-    <option name="testRunner" value="GRADLE" />
-    <option name="delegatedBuild" value="true" />
+    <option name="isMigrated" value="true" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/new_rpsls/Server.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="701">
-              <caret line="235" column="166" selection-start-line="235" selection-start-column="166" selection-end-line="235" selection-end-column="166" />
+            <state relative-caret-position="1021">
+              <caret line="559" column="107" selection-start-line="559" selection-start-column="107" selection-end-line="559" selection-end-column="107" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1774#1775#0" expanded="true" />
-                <element signature="e#1841#1842#0" expanded="true" />
+                <element signature="e#25713#25714#0" expanded="true" />
+                <element signature="e#25757#25758#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -55,20 +56,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/new_rpsls/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1221">
-              <caret line="327" column="28" lean-forward="true" selection-start-line="327" selection-start-column="28" selection-end-line="327" selection-end-column="28" />
+            <state relative-caret-position="-5644">
+              <caret line="327" column="28" selection-start-line="327" selection-start-column="28" selection-end-line="327" selection-end-column="28" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/new_rpsls/Lobby.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1512">
-              <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
             </state>
           </provider>
         </entry>
@@ -120,7 +112,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="dev" />
+        <entry key="$PROJECT_DIR$" value="PaulDev2" />
       </map>
     </option>
   </component>
@@ -137,15 +129,17 @@
         <option value="$PROJECT_DIR$/src/rps/Server.java" />
         <option value="$PROJECT_DIR$/src/rps/Client.java" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/src/new_rpsls/Lobby.java" />
         <option value="$PROJECT_DIR$/src/new_rpsls/ClientThread.java" />
         <option value="$PROJECT_DIR$/src/module-info.java" />
         <option value="$PROJECT_DIR$/src/new_rpsls/Client.java" />
+        <option value="$PROJECT_DIR$/src/new_rpsls/Lobby.java" />
         <option value="$PROJECT_DIR$/src/new_rpsls/Server.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="369" />
+    <option name="y" value="-14" />
     <option name="width" value="960" />
     <option name="height" value="1040" />
   </component>
@@ -157,28 +151,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="cs342_project4" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="rpsls_desktop" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-            </path>
-            <path>
-              <item name="cs342_project4" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="rpsls_desktop" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="cs342_project4" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="rpsls_desktop" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="new_rpsls" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -204,11 +176,40 @@
               <item name="new_rpsls" type="462c0819:PsiDirectoryNode" />
               <item name="Resources" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="cs342_project4" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cs342_project4" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="new_rpsls" type="462c0819:PsiDirectoryNode" />
+              <item name="Server.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="PackagesPane" />
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="cs342_project4" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="rpsls_desktop" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
+            <path>
+              <item name="cs342_project4" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="rpsls_desktop" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="cs342_project4" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="rpsls_desktop" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="new_rpsls" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -348,7 +349,14 @@
       <option name="project" value="LOCAL" />
       <updated>1554942471721</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Started Server GUI. Note: Lobby logic makes printing server messages difficult. Will look into later.">
+      <created>1554961609565</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1554961609565</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -363,7 +371,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49899396" visible="true" weight="0.12526652" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49899396" visible="true" weight="0.12633263" />
       <window_info id="Structure" order="1" sideWeight="0.501006" side_tool="true" weight="0.25302014" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -383,7 +391,6 @@
       <window_info anchor="bottom" id="Terminal" order="10" weight="0.14938684" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.504698" side_tool="true" weight="0.32719547" />
       <window_info anchor="bottom" id="Messages" order="12" sideWeight="0.49530202" weight="0.32719547" />
-      <window_info anchor="right" id="Cargo" />
       <window_info anchor="right" id="Coverage" order="0" side_tool="true" weight="0.3295302" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="1" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
@@ -394,6 +401,7 @@
       <window_info anchor="right" id="Maven" order="7" />
       <window_info anchor="right" id="Capture Analysis" order="8" />
       <window_info anchor="right" id="Palette&#9;" order="9" />
+      <window_info anchor="right" id="Cargo" order="10" />
     </layout>
     <layout-to-restore>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49899396" visible="true" weight="0.25302014" />
@@ -434,7 +442,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Added commands in the bottom right corner of the user gui" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added commands in the bottom right corner of the user gui" />
+    <MESSAGE value="Started Server GUI. Note: Lobby logic makes printing server messages difficult. Will look into later." />
+    <option name="LAST_COMMIT_MESSAGE" value="Started Server GUI. Note: Lobby logic makes printing server messages difficult. Will look into later." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -456,12 +465,6 @@
           <line>274</line>
           <properties />
           <option name="timeStamp" value="15" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/new_rpsls/Lobby.java</url>
-          <line>152</line>
-          <properties />
-          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -527,6 +530,13 @@
     <entry file="file://$PROJECT_DIR$/src/new_rpsls/Resources/lizard.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_91/src.zip!/java/io/InputStreamReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="183" column="18" selection-start-line="183" selection-start-column="18" selection-end-line="183" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/new_rpsls/ClientThread.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="782">
@@ -537,38 +547,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/new_rpsls/Lobby.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/new_rpsls/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1221">
-          <caret line="327" column="28" lean-forward="true" selection-start-line="327" selection-start-column="28" selection-end-line="327" selection-end-column="28" />
+        <state relative-caret-position="-5644">
+          <caret line="327" column="28" selection-start-line="327" selection-start-column="28" selection-end-line="327" selection-end-column="28" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_91/src.zip!/java/io/InputStreamReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="183" column="18" selection-start-line="183" selection-start-column="18" selection-end-line="183" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/new_rpsls/Lobby.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1512">
-          <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/new_rpsls/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="701">
-          <caret line="235" column="166" selection-start-line="235" selection-start-column="166" selection-end-line="235" selection-end-column="166" />
+        <state relative-caret-position="1021">
+          <caret line="559" column="107" selection-start-line="559" selection-start-column="107" selection-end-line="559" selection-end-column="107" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1774#1775#0" expanded="true" />
-            <element signature="e#1841#1842#0" expanded="true" />
+            <element signature="e#25713#25714#0" expanded="true" />
+            <element signature="e#25757#25758#0" expanded="true" />
           </folding>
         </state>
       </provider>
