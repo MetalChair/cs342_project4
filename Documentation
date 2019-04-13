@@ -162,9 +162,19 @@ Interfaces Implemented: Runnable
 
 
 Data Members: 
-
+Data Members: 
+->  isGettingInput  type boolean  - used to determine if input was highly successful --------> initial: false
+->  socket          type Socket - used for client to get hold of the connection  ------------> initial: null
+->  in              type BufferedReader - used for sending messages to server ---------------> initial: null
+->  out             type PrintWriter - used for outputting messages between s/c -------------> initial: null
 
 Class Methods: 
+run()               type void    inherited from Runnable 
+The method starts by initializing the values of in and out. An infinite loop is created in order for the 
+server to keep listening for any messages that come from any connected clients. Through this infinite loop, 
+messages can be added, appended, modified, or deleted. Server receives these messages through the client
+thread. Through this thread, the server can receive multiple messages. The server reading is handled through
+an exception which will just state that an error has occurred if reading does not occur successfully. 
 
 
 
@@ -172,5 +182,8 @@ Class Methods:
 
 
 
+############################### ERRORS DOCUMENTED ####################
+
+NullPointerException 
 
 
