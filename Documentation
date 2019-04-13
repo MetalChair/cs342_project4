@@ -13,3 +13,121 @@ Group Members:
 ->Vivek Ganesan 
 
 
+///*************************CLASS CLIENT ******************************
+
+Parent Class: Application
+Inner Classes: ClientListener 
+Children Classes: None
+Interfaces Implemented: None 
+
+Data Members: 
+->  toServer        type PrintWriter
+->  fromServer      type BufferedReader
+->  ip              type String
+->  port            type int
+
+Class Methods: 
+start()             type void     inherit from Application
+Handles the user interface of this application. This function creates a border pane
+with buttons, textfields, text messages, clickable images, and structured event driven
+programming (sets listeners for all clickable buttons). 
+All events are handled within the start method. GUI generates as a result
+of the start method. 
+The start() method also implements a network connection for the localhost from Port
+number 5555. This will allow the client to run a local connection on Port 5555 provided
+that a server is listening an will accept messages for the client to run. 
+
+main()              type static void  
+This function calls the Application.launch() method which will implement the start()
+method and begin the GUI interface. 
+
+
+
+
+///*************************CLASS CLIENTLISTENER ******************************
+
+Parent Class: Client
+Inner Classes: None
+Children Classes: None
+Interfaces Implemented: Runnable
+
+
+Data Members: 
+->  area            type TextArea  - used to display messages
+->  in              type BufferedReader - used to send messages to the server
+->  out             type PrintWriter - used to receive messages from the server
+->  resetBox        type HBox - holds the application structure for the GUI 
+
+Class Methods: 
+run()               type void     inherit from Runnable
+This class will create the thread necessary to receive and read in messages that 
+go from client to server. The function implements an infinite while loop where
+the server is always waiting for messages to collect from the client, and the server
+is not going to stop until it is ended by the server class. An try catch exception 
+is implemented here because the server may not be able to retrieve messages from the
+client that are being sent over. 
+
+
+
+
+ ///*************************CLASS SERVER ******************************
+
+Parent Class: Application 
+Inner Classes: ClientThread
+Children Classes: None
+Interfaces Implemented: None 
+
+
+Data Members: 
+->  server          type ServerSocket  - used to initiate a listener for the server ---> initial: null
+->  client1         type ClientThread - used for client 1 to send messages to server --> initial: null
+->  client2         type ClientThread - used for client 2 to send messages to server --> initial: null 
+->  clientMove1     type int - used to keep track of client 1's moves and scores ------> initial: 0
+->  clientMove2     type int - used to keep track of client 2's moves and scores ------> initial: 0 
+->  messages        type TextArea - used to display messages on the server GUI --------> initial: new TextArea() 
+->  clientThreads   type ArrayList<ClientThread> - used to keep track of threads ------> initial: new ArrayList<ClientThread>() 
+->  gameState       type int - used to maintain game state, determine the turns for ---> initial: 0 
+
+
+Class Methods: 
+setupLayout()       type Parent (private) 
+This function will set up the UI for the server. The server view will contain an initial 600 x 600
+layout will a textfield and clickable image buttons. 
+
+sendToAllClients    type void (private) 
+Parameters: String
+The server will send messages to the clients using this function. For each clientThread in the clientThreads
+ArrayList data structure, the clients will retrieve the message using the flush() mechanism. 
+
+startGame()         type void (private) 
+The server will send messages to client indicating the game has started and clients should begin
+to initiate their moves at this very moment. 
+
+getInput()          type void (private) 
+The clientThreads array will initiate each client to retrieve their messages. Since the number of clients
+connected to this particular server is arbitrary, the arraylist is needed to retrieve inputs for each client
+that is connected. 
+
+validateInputs()    type boolean (private) 
+
+
+reset()             type void (private) 
+
+intToPlayString()   type String (private) 
+Parameters: int
+
+
+
+checkForWonThree()   type void (private) 
+
+determineWinnerAndAddScore() type void (private) 
+
+
+
+
+
+
+
+
+
+
