@@ -82,8 +82,8 @@ Data Members:
 ->  server          type ServerSocket  - used to initiate a listener for the server ---> initial: null
 ->  client1         type ClientThread - used for client 1 to send messages to server --> initial: null
 ->  client2         type ClientThread - used for client 2 to send messages to server --> initial: null 
-->  clientMove1     type int - used to keep track of client 1's moves and scores ------> initial: 0
-->  clientMove2     type int - used to keep track of client 2's moves and scores ------> initial: 0 
+->  client1Move     type int - used to keep track of client 1's moves and scores ------> initial: 0
+->  client2Move     type int - used to keep track of client 2's moves and scores ------> initial: 0 
 ->  messages        type TextArea - used to display messages on the server GUI --------> initial: new TextArea() 
 ->  clientThreads   type ArrayList<ClientThread> - used to keep track of threads ------> initial: new ArrayList<ClientThread>() 
 ->  gameState       type int - used to maintain game state, determine the turns for ---> initial: 0 
@@ -109,19 +109,62 @@ connected to this particular server is arbitrary, the arraylist is needed to ret
 that is connected. 
 
 validateInputs()    type boolean (private) 
-
+This will validate to the server that the inputs have been received from the clients. With software, messages
+are not always sent from client to server. Connection issues can arise. This function is a sanity checker for
+the software to determine if the messages from clients have arrived. 
 
 reset()             type void (private) 
+This will reset client1Move and client2Move to 0. 
 
 intToPlayString()   type String (private) 
 Parameters: int
-
+This determines a number mapping system. Using a technique of branching similar to that of hashmaps, the
+code can convert an int to its respective string. 
+1 - Rock 
+2 - Scissors
+3 - Paper
+4 - Lizard
+5 - Spock 
 
 
 checkForWonThree()   type void (private) 
+According to the handout, the game ends when one player has a score of 3. The getScore() method from 
+the ClientThread class is used to determine the score. When a player's score is 3, the game ends and 
+a winner is determined based on the points each client has. 
 
 determineWinnerAndAddScore() type void (private) 
+This function uses a series of branching techniques to determine who is the winner and who is the loser
+of the game for just one move only. The first part of the function states a series of branch statements
+that determine the winner. The server determines this through it algorithm and then uses the client connection's
+flush() method to output the message back to the client. The reset() method and the checkForWonThree() method
+are both called here in order to reset the game while preserving the points each client has already won. 
 
+start()              type void   inherited from Application 
+Parameters: Stage
+This method will initiate the connection and layout for the GUI server. The Thread class, which is an
+abstract class, is implicity allocated with the thread being run inside the run() method. An infinite loop
+is running so the server is always ready to accept messages from any client it is connected to. A new client
+and new ClientThread is created with a newly allocated Input and Output Stream. The game state is initialized
+with moves and scores being set to 0. This is all handled by try catch exception. The server and GUI initialization
+are tried the exception is handled as the software is instructed to exit entirely if any part of this fails. 
+
+main()               type static void
+Initiation method.
+
+
+
+///*************************CLASS CLIENTTHREAD ******************************
+
+Parent Class: Server
+Inner Classes: None
+Children Classes: None
+Interfaces Implemented: Runnable
+
+
+Data Members: 
+
+
+Class Methods: 
 
 
 
