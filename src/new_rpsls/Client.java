@@ -1,6 +1,7 @@
 package new_rpsls;
 
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -63,7 +64,8 @@ public class Client extends Application {
 
 
         }catch(Exception e){
-            e.printStackTrace();
+            //e.printStackTrace();
+            this.log.appendText("Failed to connect to server\n");
         }
     }
 
@@ -341,17 +343,29 @@ public class Client extends Application {
         clientPane.setPadding(new Insets(5,5,5,5));
         VBox container = new VBox();
 
+        // set the log
+        TextArea log = new TextArea();
+        log.setMinHeight(200);
+        log.setEditable(false);
+        this.log = log;
+
         //User name box
         Label username = new Label("Username: ");
-        TextField userField=  new TextField("RPSGod");
+        TextField userField=  new TextField();
+        userField.setPromptText("Enter username");
+        userField.setMaxWidth(250);
 
         //IP box
         Label ip = new Label("IP Address");
-        TextField ipField = new TextField("192.168.0.1");
+        TextField ipField = new TextField();
+        ipField.setPromptText("Enter IP Address");
+        ipField.setMaxWidth(250);
 
         //Port box
         Label port = new Label("Port:");
-        TextField portField = new TextField("5555");
+        TextField portField = new TextField();
+        portField.setPromptText("Enter port number");
+        portField.setMaxWidth(250);
 
         //Finish button
         Button submit = new Button("Connect");
@@ -361,7 +375,8 @@ public class Client extends Application {
 
         //Add the vbox to the middle and add all buttons
         clientPane.setCenter(container);
-        container.getChildren().addAll(username,userField,ip,ipField,port,portField,submit);
+        container.getChildren().addAll(log,username,userField,ip,ipField,port,portField,submit);
+        container.setAlignment(Pos.CENTER);
 
         //Create a scene and return it
         Scene newScene = new Scene(clientPane,700,500);
