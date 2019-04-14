@@ -323,16 +323,16 @@ public class Client extends Application {
             Image rockImg = new Image(getClass().getResourceAsStream("./Resources/rock.png"),75,75,false,false);
             image = new ImageView(rockImg);
         }else if(move == 2){
-            Image scissorsImg = new Image(getClass().getResourceAsStream("./Resources/scissors.jpg"),75,75,false,false);
+            Image scissorsImg = new Image(getClass().getResourceAsStream("./Resources/scissors.png"),75,75,false,false);
             image = new ImageView(scissorsImg);
         }else if(move == 3){
             Image paperImg = new Image(getClass().getResourceAsStream("./Resources/paper.png"),75,75,false,false);
             image = new ImageView(paperImg);
         }else if(move == 4){
-            Image lizardImg = new Image(getClass().getResourceAsStream("./Resources/lizard.jpg"),75,75,false,false);
+            Image lizardImg = new Image(getClass().getResourceAsStream("./Resources/lizard.png"),75,75,false,false);
             image = new ImageView(lizardImg);
         }else{
-            Image spockImg = new Image(getClass().getResourceAsStream("./Resources/spock.jpg"),75,75,false,false);
+            Image spockImg = new Image(getClass().getResourceAsStream("./Resources/spock.png"),75,75,false,false);
             image = new ImageView(spockImg);
         }
         return image;
