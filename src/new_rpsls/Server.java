@@ -241,6 +241,16 @@ public class Server extends Application{
                                             challenge.setChallenger(clients.get(i));
                                             //TODO:this bit
                                         }
+                                    } else {
+                                        final int temp = i;
+                                        // else send to the client that this user does not exist on the server
+                                        sendToUser(clients.get(i), "!CHALLENGE This user does not exist on this server");
+                                        Platform.runLater(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                messages.appendText(clients.get(temp).getUserName() + " tried to challenge a non-existing user. \n");
+                                            }
+                                        });
                                     }
                                 }else if(currMessage.contains("!GETCLIENTLIST")){
                                     sendConnectedPlayersList(getConnectedPlayersList());
