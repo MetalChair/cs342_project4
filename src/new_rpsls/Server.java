@@ -2,6 +2,7 @@ package new_rpsls;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -114,12 +115,15 @@ public class Server extends Application{
            }
         });
         VBox root = new VBox(20, portChoice, input, startButton);
+        root.setPadding(new Insets(5,5,5,5));
         return root;
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         this.stage = primaryStage;
+        stage.setMinHeight(700);
+        stage.setMinWidth(500);
         this.stage.setScene(new Scene(serverSetUpScreen()));
         this.stage.show();
     }

@@ -40,6 +40,7 @@ public class Client extends Application {
     private VBox gameLog;
     private VBox gameTextLog;
     private HBox resetBox;
+    private Label serverFailLabel;
 
     private void connectToServer(String ip, String port, String userName){
         System.out.println("Ready to connect with this information");
@@ -65,7 +66,7 @@ public class Client extends Application {
 
         }catch(Exception e){
             //e.printStackTrace();
-            this.log.appendText("Failed to connect to server\n");
+            this.serverFailLabel.setText("Failed to connect to server\n");
         }
     }
 
@@ -344,10 +345,10 @@ public class Client extends Application {
         VBox container = new VBox();
 
         // set the log
-        TextArea log = new TextArea();
-        log.setMinHeight(200);
-        log.setEditable(false);
-        this.log = log;
+        Label log = new Label();
+        log.setMinHeight(100);
+        this.serverFailLabel = log;
+        log.setTextFill(Color.rgb(255,0,0));
 
         //User name box
         Label username = new Label("Username: ");
