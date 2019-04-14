@@ -1,6 +1,7 @@
 package new_rpsls;
 
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -63,7 +64,8 @@ public class Client extends Application {
 
 
         }catch(Exception e){
-            e.printStackTrace();
+            //e.printStackTrace();
+            this.log.appendText("Failed to connect to server\n");
         }
     }
 
@@ -90,7 +92,7 @@ public class Client extends Application {
         paperBtn.setGraphic(paperBG);
 
         //scissors
-        Image scissorsImg = new Image(getClass().getResourceAsStream("./Resources/scissors.jpg"));
+        Image scissorsImg = new Image(getClass().getResourceAsStream("./Resources/scissors.png"));
         Button scissorsBtn = new Button();
         scissorsBtn.setMaxHeight(75);
         scissorsBtn.setMaxWidth(75);
@@ -100,7 +102,7 @@ public class Client extends Application {
         scissorsBtn.setGraphic(scissorsBG);
 
         //lizard
-        Image lizardImg = new Image(getClass().getResourceAsStream("./Resources/lizard.jpg"));
+        Image lizardImg = new Image(getClass().getResourceAsStream("./Resources/lizard.png"));
         Button lizardBtn = new Button();
         lizardBtn.setMaxHeight(75);
         lizardBtn.setMaxWidth(75);
@@ -110,7 +112,7 @@ public class Client extends Application {
         lizardBtn.setGraphic(lizardBG);
 
         //spock
-        Image spockImg = new Image(getClass().getResourceAsStream("./Resources/spock.jpg"));
+        Image spockImg = new Image(getClass().getResourceAsStream("./Resources/spock.png"));
         Button spockBtn = new Button();
         spockBtn.setMaxHeight(75);
         spockBtn.setMaxWidth(75);
@@ -289,13 +291,26 @@ public class Client extends Application {
         connectedPlayers.setEditable(false);
         playerList.getChildren().addAll(connected,connectedPlayers);
 
+        //create the box for showing all the rules and commands the users can do
+        TextArea RuleBox = new TextArea("The commands are as follows:\n" +
+                "  -> !CHALLENGE <username> : challenges the user with username currently on the server\n" +
+                "  -> !USER <newname> : sets your username to the newly listed name\n" +
+                "  -> !ACCEPT : Accepts a currently active challenge\n");
+        RuleBox.setPrefHeight(195);
+        RuleBox.setPrefWidth(200);
+        RuleBox.setEditable(false);
+        RuleBox.setWrapText(true);
+
+        VBox VBoxRuleNPlayerLog = new VBox();
+        VBoxRuleNPlayerLog.getChildren().addAll(playerList, RuleBox);
+
         //Challenge text
         challengeField = new Label("");
         challengeField.setTextFill(Color.rgb(255,0,0));
-        fullContainer.getChildren().addAll(container,playerList);
+        fullContainer.getChildren().addAll(container,VBoxRuleNPlayerLog);
         container.getChildren().addAll(serverLabel,log,input,challengeField);
 
-        //Set the secene
+        //Set the scene
         chatPane.setCenter(fullContainer);
 
         this.stage.setScene(new Scene(chatPane,700,500));
@@ -328,17 +343,29 @@ public class Client extends Application {
         clientPane.setPadding(new Insets(5,5,5,5));
         VBox container = new VBox();
 
+        // set the log
+        TextArea log = new TextArea();
+        log.setMinHeight(200);
+        log.setEditable(false);
+        this.log = log;
+
         //User name box
         Label username = new Label("Username: ");
-        TextField userField=  new TextField("RPSGod");
+        TextField userField=  new TextField();
+        userField.setPromptText("Enter username");
+        userField.setMaxWidth(250);
 
         //IP box
         Label ip = new Label("IP Address");
-        TextField ipField = new TextField("192.168.0.1");
+        TextField ipField = new TextField();
+        ipField.setPromptText("Enter IP Address");
+        ipField.setMaxWidth(250);
 
         //Port box
         Label port = new Label("Port:");
-        TextField portField = new TextField("5555");
+        TextField portField = new TextField();
+        portField.setPromptText("Enter port number");
+        portField.setMaxWidth(250);
 
         //Finish button
         Button submit = new Button("Connect");
@@ -348,7 +375,8 @@ public class Client extends Application {
 
         //Add the vbox to the middle and add all buttons
         clientPane.setCenter(container);
-        container.getChildren().addAll(username,userField,ip,ipField,port,portField,submit);
+        container.getChildren().addAll(log,username,userField,ip,ipField,port,portField,submit);
+        container.setAlignment(Pos.CENTER);
 
         //Create a scene and return it
         Scene newScene = new Scene(clientPane,700,500);
